@@ -31,7 +31,7 @@ function AdminCover({ children }) {
     const referenceHeaderValue = encodeURIComponent(authData.reference);
 
     config.headers.authorization = jwtHeaderValue;
-    config.headers.refresh_reference = referenceHeaderValue;
+    config.headers.reference = referenceHeaderValue;
 
 
     return config;
