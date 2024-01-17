@@ -89,7 +89,7 @@ function ProductSearching() {
 
         setProductList(newProductList)
 
-    }, [productSearchData])
+    }, [tempProductList,productSearchData])
 
 
     return (
