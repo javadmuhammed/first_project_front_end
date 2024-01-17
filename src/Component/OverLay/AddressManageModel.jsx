@@ -106,7 +106,7 @@ function AddressManageModel({ state }) {
 
 
     useEffect(() => {
-        let tempAddressTypes = [...Object.values(const_data.ADDRESS_TYPE), ...userData?.extra_address_type]
+        let tempAddressTypes = [...Object.values(const_data.ADDRESS_TYPE)]
         setAddressTypes(tempAddressTypes)
     }, [])
 

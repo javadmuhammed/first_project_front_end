@@ -66,20 +66,7 @@ function Cart() {
 
     useEffect(() => {
 
-
-        // getCartItemsMerg();
-
-        // getCartItems()
-        //     .then((data) => {
-        //         if (data.data?.status) {
-        //             const cartProduct = data.data?.cart?.cartData;
-        //             const priceData = data.data?.cart?.priceList;
-        //             setCartItems(cartProduct ?? []);
-        //             setPriceList(priceData ?? []);
-        //         }
-        //     })
-        //     .catch((err) => {
-        //     });
+ 
 
         getUserAddress()
             .then((data) => {
@@ -212,7 +199,7 @@ function Cart() {
                                         title: "100% Genuine Products",
                                         icon: "check-square"
                                     }, {
-                                        title: "Secure Payments",
+                                          title: "Secure Payments",
                                         icon: "shield-check"
                                     }]}>
 
