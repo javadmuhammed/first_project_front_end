@@ -85,8 +85,7 @@ function ProductSearching() {
         if (pname != '' && pname != null) {
             newProductList = newProductList.filter((each) => each.name.toLowerCase().includes(pname.toLowerCase()));
         }
-
-        alert(productSearchData?.category?.join(", "))
+ 
 
         setProductList(newProductList)
 
@@ -97,9 +96,7 @@ function ProductSearching() {
         <UserLayout>
             <Breadcrumb pageName={"Product Searching"}></Breadcrumb>
             <div className="container mt-5">
-{
-    productSearchData?.category?.join(", ")
-}
+ 
                  <div className="row">
                     <div className="col-md-3">
                         <ProdctSearchingSideBar></ProdctSearchingSideBar>
