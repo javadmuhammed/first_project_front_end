@@ -60,17 +60,12 @@ function UserLoggin() {
                         referal_code: loggedUser?.referal_code, 
                     }
 
-                    authHelper.setJWTToken(user.data.user.access_token, user.data.user._id)
-<<<<<<< HEAD
+                    authHelper.setJWTToken(user.data.user.access_token, user.data.user._id) 
                     authHelper.setUserToLocalStorage(userLocalData)
                     authHelper.setHeaderRequest(user.data.user.access_token,user.data.user._id)
                     dispatcher(await getUserByJwtToken({ jwt: loggedUser?.access_token})) 
                     dispatcher(await fetchCartDetails())
-                    
-=======
-                     authHelper.setUserToLocalStorage(userLocalData)
-                    dispatcher(await getUserByJwtToken({ jwt: loggedUser?.access_token}))
->>>>>>> 0cb0c455df499d6555ac75982f82c6a76aacbe92
+ 
                     setIsSpinning(false)
                     navigate("/")
                 } else {
