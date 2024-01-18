@@ -24,7 +24,7 @@ function CartItem({stock, cart_id, productImage, productTitle, productQuanity, s
                     <div class="offer-badge">{stock}% OFF</div>
                 </div>
                 <div class="cart-text">
-                    <h4>{productTitle}</h4>
+                    <h4>{productTitle} </h4>
                     <div class="cart-radio">
                          <ProductVariation cart_id={cart_id} product_id={product_id} selected_variation={selected_variation} ></ProductVariation>
                     </div>

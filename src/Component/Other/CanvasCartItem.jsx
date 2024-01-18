@@ -12,8 +12,7 @@ function CanvasCartItem(props) {
 
 
 
-    let product = props.product; 
-    console.log(product)
+    let product = props.product;  
     let discountPercentage = findDiscountPercentage(product.original_price, product.sale_price)
 
     return (
@@ -25,11 +24,14 @@ function CanvasCartItem(props) {
             </div>
 
             <div className="cart-text">
-                <h4 className='mb-2'>{props.product?.name}</h4>
+                <h4 className='mb-2'>{props.product?.name} </h4>
                 <ProductVariation selected_variation={props.variation} cart_id={props.cart_id} product_id={props.product?._id}></ProductVariation>
                 <div className="qty-group">
                     {
-                        product.stock <= 0 ? (<div><p>Not available (Out of stock) </p></div>) : product.stock <= 10 ? (<div> <ProductQuanityManagerInCart stock={product?.stock} product_id={props.product?._id} cart_id={props.cart_id} onInc={() => { }} onDec={() => { }}   onUpdate={() => { }}></ProductQuanityManagerInCart> <p className='mb-0'>Limited Stock</p>  </div>) : <ProductQuanityManagerInCart stock={product?.stock} product_id={props.product?._id} cart_id={props.cart_id} onInc={() => { }} onDec={() => { }} currentValue={props.currentQuanity} onUpdate={() => { }}></ProductQuanityManagerInCart>
+                        product.stock <= 0 ? (<div><p>Not available (Out of stock) </p></div>) : product.stock <= 10 ? (
+                            <div> <ProductQuanityManagerInCart stock={product?.stock} product_id={props.product?._id} cart_id={props.cart_id} onInc={() => { }} onDec={() => { }} currentValue={props.currentQuanity}   onUpdate={() => { }}></ProductQuanityManagerInCart> 
+                            <p className='mb-0'>Limited Stock</p>  </div>) : 
+                            <ProductQuanityManagerInCart stock={product?.stock} product_id={props.product?._id} cart_id={props.cart_id} onInc={() => { }} onDec={() => { }} currentValue={props.currentQuanity} onUpdate={() => { }}></ProductQuanityManagerInCart>
                     }
                     <div className="cart-item-price">{const_data.CURRENCY_ICON}{product.sale_price}/kg<span>{const_data.CURRENCY_ICON}{product.original_price}</span></div>
                 </div> 

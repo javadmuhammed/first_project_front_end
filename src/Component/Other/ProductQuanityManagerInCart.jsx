@@ -44,7 +44,7 @@ function ProductQuanityManagerInCart({ cart_id, currentValue, product_id, onQuan
     return (
         <div>
             <div className="quantity buttons_added">
-
+ 
                 <input type="button" data-disabled="true" onClick={quantityDec} value="-" className="minus minus-btn" />
                 <input type="number" ref={productQuanity} step="1" name="quantity" value={currentValue} className="input-text qty text" />
                 <input type="button" data-disabled="true" onClick={quantityInc} value="+" className="plus plus-btn" />

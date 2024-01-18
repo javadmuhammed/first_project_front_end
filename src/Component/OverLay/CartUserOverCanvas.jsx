@@ -14,15 +14,12 @@ function CartUserOverCanvas() {
     let userAuth = useSelector((state) => state.userAuth);
     let dispatch = useDispatch();
 
-    async function refreshCart() {
-        if (userAuth?.isLogged) {
-            dispatch(await fetchCartDetails());
-        } 
-    }
 
     useEffect(() => {
-        refreshCart()
-    }, [cartData?.cart_update])
+        if (userAuth?.isLogged) {  
+            dispatch(fetchCartDetails());
+        } 
+    }, [cartData?.cart_update,userAuth])
 
 
 
