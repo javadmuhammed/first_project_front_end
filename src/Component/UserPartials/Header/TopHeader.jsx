@@ -4,6 +4,7 @@ import HeaderProductSearch from '../../Other/HeaderProductSearch'
 import HeaderUserIcon from './HeaderUserIcon'
 import LogoWidget from '../../Util/Logo/LogoWidget'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 function TopHeader() {
 
@@ -23,13 +24,13 @@ function TopHeader() {
                         <div className="header_right">
                             <ul>
                                 <li>
-                                    <a href="#" className="offer-link"><i className="uil uil-phone-alt"></i>1800-000-000</a>
+                                     <i className="uil uil-phone-alt"></i>+91 9744727684 
                                 </li>
                                 <li>
                                     <a href="offers.html" className="offer-link"><i className="uil uil-gift"></i>Offers</a>
                                 </li>
                                 <li>
-                                    <a href="dashboard_my_wishlist.html" className="option_links" title="Wishlist"><i className='uil uil-heart icon_wishlist'></i><span className="noti_count1">3</span></a>
+                                    <Link to="/wishlist" className="option_links" title="Wishlist"><i className='uil uil-heart icon_wishlist'></i> </Link>
                                 </li>
                                 <li className="ui dropdown">
                                     <HeaderUserIcon></HeaderUserIcon>

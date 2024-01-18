@@ -1,3 +1,4 @@
+import instance from "../axios/instance";
 
 
 let authHelper = {
@@ -32,7 +33,25 @@ let authHelper = {
         localStorage.setItem("profile", JSON.stringify(profileData))
         return true;
     },
+
+
+    setHeaderRequest: (jwt,reference) => {
  
+        instance.interceptors.request.use(function (config) {
+
+            const jwtHeaderValue = "Bearer " + encodeURIComponent(jwt);
+            const referenceHeaderValue = encodeURIComponent(reference);
+
+            config.headers.authorization = jwtHeaderValue;
+            config.headers.reference = referenceHeaderValue;
+
+
+            return config;
+        }, (error) => {
+            return Promise.reject(error);
+        });
+    }
+
 }
 
 export default authHelper

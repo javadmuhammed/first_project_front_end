@@ -11,11 +11,18 @@ import { fetchCartDetails, removeFromCart } from '../../redux/slice/CartItems'
 function CartUserOverCanvas() {
 
     let cartData = useSelector((state) => state.userCart);
+    let userAuth = useSelector((state) => state.userAuth);
     let dispatch = useDispatch();
 
+    async function refreshCart() {
+        if (userAuth?.isLogged) {
+            dispatch(await fetchCartDetails());
+        } 
+    }
+
     useEffect(() => {
-        console.log("Cart Data", cartData)
-    }, [cartData])
+        refreshCart()
+    }, [cartData?.cart_update])
 
 
 
@@ -37,7 +44,7 @@ function CartUserOverCanvas() {
                                 return (<CanvasCartItem
                                     onDelete={async () => {
                                         dispatch(await removeFromCart({ cart_id: item._id, product_id: item.product_id }));
-                                        dispatch(await fetchCartDetails());
+                                        // dispatch(await fetchCartDetails());
                                     }}
 
                                     key={index}

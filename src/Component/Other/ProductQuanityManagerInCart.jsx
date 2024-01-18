@@ -26,7 +26,7 @@ function ProductQuanityManagerInCart({ cart_id, currentValue, product_id, onQuan
         }
 
         dispatch(await changeQuantity({ cart_id, quantity: currentValue - 1, product_id: product_id }))
-        dispatch(await fetchCartDetails())
+        // dispatch(await fetchCartDetails())
     }
 
     async function quantityInc() {
@@ -34,7 +34,7 @@ function ProductQuanityManagerInCart({ cart_id, currentValue, product_id, onQuan
             setOutOfStock(true)
         } else {
             dispatch(await changeQuantity({ cart_id, quantity: currentValue + 1, product_id: product_id }))
-            dispatch(await fetchCartDetails())
+            // dispatch(await fetchCartDetails())
             setOutOfStock(false)
         }
     }

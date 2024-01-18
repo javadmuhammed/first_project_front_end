@@ -62,12 +62,13 @@ function UserSignup() {
         setSpinning(true);
         fisrtLevel.validate({ isOtpSend, firstName, lastName, email, phoneNumber, userid }).then(() => {
             userSignUpRequest({ firstName, lastName, email, phoneNumber, invited_code: referal_code }).then((user) => {
-                 if (user.data?.status) {
+                if (user.data?.status) {
                     setSpinning(false);
                     otpSendUpdate(true)
                     useridUpdate(user.data?.user?._id)
                     alertComponetUpdate({ component: ComponentHelper.fetchComponent(const_data.ALERT_TYPE.SUCCESS, "OTP has been send to mail") })
                 } else {
+                    console.log(user.data)
                     alertComponetUpdate({ component: ComponentHelper.fetchComponent(const_data.ALERT_TYPE.ERROR, user?.data?.msg) })
                     setSpinning(false);
                 }
@@ -77,7 +78,7 @@ function UserSignup() {
             })
         }).catch((err) => {
             setSpinning(false);
-            alertComponetUpdate({ component: ComponentHelper.fetchComponent(const_data.ALERT_TYPE.ERROR, err.message) })
+            alertComponetUpdate({ component: ComponentHelper.fetchComponent(const_data.ALERT_TYPE.ERROR, err.message ?? "Something went wrong") })
         })
     }
 

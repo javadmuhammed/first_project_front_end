@@ -12,7 +12,7 @@ function CartItem({stock, cart_id, productImage, productTitle, productQuanity, s
 
     async function cartItemDelete() {
         dispatch(await removeFromCart({ cart_id: cart_id, product_id: product_id })) 
-        dispatch(await fetchCartDetails()) 
+        // dispatch(await fetchCartDetails()) 
     }
 
     return (

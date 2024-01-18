@@ -5,8 +5,10 @@ const { const_data } = require("../../CONST/const_data");
 import { toast } from 'react-toastify'
 
 export let fetchCartDetails = createAsyncThunk("cart/get_data", async (payload) => {
+
     try {
         let addToCart = await instance.get(const_data.API_ENDPOINT.get_cart_items)
+        console.log(addToCart)
         return addToCart;
     } catch (e) {
         return null;
@@ -64,6 +66,7 @@ export let addToCartThunk = createAsyncThunk("cart/add_item", async (payload, { 
 let CartSlicer = createSlice({
     name: "cart",
     initialState: {
+        cart_update: true,
         numberOfItems: 0,
         cart: null,
         priceData: {
@@ -87,21 +90,29 @@ let CartSlicer = createSlice({
         removeItem: (state, action) => {
             state.numberOfItems--
             let newCart = state.cart.filter((productItem) => productItem.product_id);
+        },
+        clearCart: (state, action) => {
+            state.numberOfItems = 0;
+            state.cart = null;
+            state.priceData = {
+                "subTotal": 0,
+                "total": 0,
+                "discount": 0
+            }
         }
     },
     extraReducers: (builder) => {
         builder.addCase(addToCartThunk.fulfilled, (state, action) => {
-
-            let data = action.payload;   
+            let data = action.payload;
             if (data?.data?.status) {
                 toast.success(data?.data?.msg, const_data.DEFAULT_ALERT_DATA);
-                state.numberOfItems++;
+                state.cart_update = !state.cart_update;
             } else {
                 toast.warning(data?.data?.msg);
             }
         }).addCase(fetchCartDetails.fulfilled, (state, action) => {
             let data = action?.payload?.data;
-            console.log(data)
+
             if (data?.status) {
                 state.numberOfItems = data?.cart?.cartData?.length ?? 0;
                 state.cart = data?.cart?.cartData
@@ -110,13 +121,20 @@ let CartSlicer = createSlice({
         }).addCase(removeFromCart.fulfilled, (state, action) => {
             let data = action?.payload?.data;
             if (data?.status) {
+                state.cart_update = !state.cart_update;
                 toast.success("Cart item delete success")
             } else {
                 toast.success("Something went wrong")
             }
+        }).addCase(changeQuantity.fulfilled, (state, action) => {
+            let data = action?.payload?.data;
+            state.cart_update = !state.cart_update;
         })
     }
 })
+
+
+
 
 export let cartItemActions = CartSlicer.actions;
 export default CartSlicer.reducer;

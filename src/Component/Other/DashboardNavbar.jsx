@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { userAction } from '../../redux/slice/UserSlicer'
 import { Link, useLocation } from 'react-router-dom';
+import { cartItemActions } from '../../redux/slice/CartItems';
 
 function DashboardNavbar() {
 
@@ -10,7 +11,9 @@ function DashboardNavbar() {
     let currentPath = currentLocation.pathname
 
     function onLogout() {
-        dispatch(userAction.userLogout())
+        dispatch(cartItemActions.clearCart())
+        dispatch(userAction.userLogout()) 
+        window.location.href="/"
     }
 
 

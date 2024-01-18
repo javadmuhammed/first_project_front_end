@@ -14,6 +14,7 @@ import { const_data } from '../../../CONST/const_data'
 import ComponentHelper from '../../../helper/ComponentHelper'
 import * as Yup from 'yup'
 import LoadingSpinner from '../../../Component/Util/ElementRelated/LoadingSpinner'
+import { fetchCartDetails } from '../../../redux/slice/CartItems'
 
 function UserLoggin() {
 
@@ -46,22 +47,25 @@ function UserLoggin() {
 
                     let loggedUser = user.data?.user;
 
-                    // let userLocalData = {
-                    //     username: loggedUser?.username,
-                    //     email: loggedUser?.email,
-                    //     mobile: loggedUser?.mobile,
-                    //     firstName: loggedUser?.first_name,
-                    //     lastName: loggedUser?.last_name,
-                    //     profile_pic: loggedUser?.profile_pic,
-                    //     wallet_amount: loggedUser?.wallet_amount,
-                    //     total_wallet_credit: loggedUser?.total_wallet_credit,
-                    //     last_wallet_update: loggedUser?.last_wallet_update, 
-                    //     referal_code: loggedUser?.referal_code, 
-                    // }
+                    let userLocalData = {
+                        username: loggedUser?.username,
+                        email: loggedUser?.email,
+                        mobile: loggedUser?.mobile,
+                        firstName: loggedUser?.first_name,
+                        lastName: loggedUser?.last_name,
+                        profile_pic: loggedUser?.profile_pic,
+                        wallet_amount: loggedUser?.wallet_amount,
+                        total_wallet_credit: loggedUser?.total_wallet_credit,
+                        last_wallet_update: loggedUser?.last_wallet_update, 
+                        referal_code: loggedUser?.referal_code, 
+                    }
 
                     authHelper.setJWTToken(user.data.user.access_token, user.data.user._id)
-                    // authHelper.setUserToLocalStorage(userLocalData)
-                    dispatcher(await getUserByJwtToken({ jwt: loggedUser?.access_token}))
+                    authHelper.setUserToLocalStorage(userLocalData)
+                    authHelper.setHeaderRequest(user.data.user.access_token,user.data.user._id)
+                    dispatcher(await getUserByJwtToken({ jwt: loggedUser?.access_token})) 
+                    dispatcher(await fetchCartDetails())
+                    
                     setIsSpinning(false)
                     navigate("/")
                 } else {

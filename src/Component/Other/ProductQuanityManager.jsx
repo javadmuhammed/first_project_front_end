@@ -9,7 +9,7 @@ import AddtoCartBtn from '../Util/Buttons/AddtoCartBtn';
 import { useDispatch } from 'react-redux'
 import { addToCartThunk, fetchCartDetails } from '../../redux/slice/CartItems';
 
-function ProductQuanityManager({  product_id, variation }) {
+function ProductQuanityManager({ product_id, variation }) {
 
     let userState = useSelector((state) => state.userAuth.user)
     let isLogged = useSelector((state) => state.userAuth.isLogged)
@@ -18,22 +18,22 @@ function ProductQuanityManager({  product_id, variation }) {
 
     async function addToCartAction() {
         if (isLogged) {
- 
+
             dispatch(await addToCartThunk({ product_id: product_id, userid: userState?._id, variation: variation }))
-            dispatch(await fetchCartDetails())
+            
         } else {
             navigate("/login")
         }
     }
 
-     
+
 
     return (
-        <Fragment> 
+        <Fragment>
             <div className='w-100'>
                 <AddtoCartBtn onClick={addToCartAction}></AddtoCartBtn>
             </div>
-           
+
         </Fragment>
     )
 }

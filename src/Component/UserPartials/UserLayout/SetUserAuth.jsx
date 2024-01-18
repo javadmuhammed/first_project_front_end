@@ -26,7 +26,7 @@ function SetUserAuth({ children }) {
     }
 
     useEffect(() => {
-        updateUserCart();
+        // updateUserCart();
         updateUserWishlist()
     }, [])
 
@@ -45,19 +45,7 @@ function SetUserAuth({ children }) {
         reference: userData?.reference
     }
 
-    instance.interceptors.request.use(function (config) {
-
-        const jwtHeaderValue = "Bearer " + encodeURIComponent(authData.jwt);
-        const referenceHeaderValue = encodeURIComponent(authData.reference);
-
-        config.headers.authorization = jwtHeaderValue;
-        config.headers.reference = referenceHeaderValue;
-
-
-        return config;
-    }, (error) => {
-        return Promise.reject(error);
-    });
+   
 
     instance.interceptors.response.use(
         (response) => response,
