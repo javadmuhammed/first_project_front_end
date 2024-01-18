@@ -7,6 +7,9 @@ import ProductItem from '../../../Component/Product/ProductItem';
 import { const_data } from '../../../CONST/const_data';
 import { useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
+import LoadingSpinner from '../../../Component/Util/ElementRelated/LoadingSpinner';
+import CartUserOverCanvas from '../../../Component/OverLay/CartUserOverCanvas';
+import CategoryModalUser from '../../../Component/OverLay/CategoryModalUser';
 
 function ProductSearching() {
 
@@ -33,6 +36,8 @@ function ProductSearching() {
 
         console.log(productSearchData)
         let newProductList = tempProductList;
+
+
 
         if (productSearchData?.category?.length != 0) {
             let categoryList = productSearchData?.category ?? []
@@ -85,39 +90,46 @@ function ProductSearching() {
         if (pname != '' && pname != null) {
             newProductList = newProductList.filter((each) => each.name.toLowerCase().includes(pname.toLowerCase()));
         }
- 
+
 
         setProductList(newProductList)
 
-    }, [tempProductList,productSearchData])
+    }, [tempProductList, productSearchData])
 
 
     return (
-        <UserLayout>
-            <Breadcrumb pageName={"Product Searching"}></Breadcrumb>
-            <div className="container mt-5">
- 
-                 <div className="row">
-                    <div className="col-md-3">
-                        <ProdctSearchingSideBar></ProdctSearchingSideBar>
-                    </div>
-                    <div className="col-md-9">
-                        <div className="row">
-                            {
-                                productList?.map((item) => {
-                                    return (
-                                        <div className="col-md-4">
-                                            <ProductItem _id={item?._id} original_price={item?.original_price} sale_price={item?.sale_price} product_image={const_data.public_image_url + "/" + item?.images[0]} stock={item?.stock} title={item?.name} key={item?._id} ></ProductItem>
-                                        </div>
-                                    )
-                                })
+        <div>
+            <LoadingSpinner></LoadingSpinner>
 
-                            }
+            <CartUserOverCanvas />
+            <CategoryModalUser></CategoryModalUser>
+            <UserLayout>
+                <Breadcrumb pageName={"Product Searching"}></Breadcrumb>
+                <div className="container mt-5">
+               
+                    <div className="row">
+                        <div className="col-md-3">
+                       
+                            <ProdctSearchingSideBar></ProdctSearchingSideBar>
+                        </div>
+                        <div className="col-md-9">
+                            <div className="row">
+                                {
+                                    productList?.map((item) => {
+                                        return (
+                                            <div className="col-md-4">
+                                                <ProductItem _id={item?._id} original_price={item?.original_price} sale_price={item?.sale_price} product_image={const_data.public_image_url + "/" + item?.images[0]} stock={item?.stock} title={item?.name} key={item?._id} ></ProductItem>
+                                            </div>
+                                        )
+                                    })
+
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </UserLayout>
+            </UserLayout>
+        </div>
     )
 }
 

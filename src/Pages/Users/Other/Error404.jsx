@@ -3,11 +3,13 @@ import UserLayout from '../../../Component/UserPartials/UserLayout/UserLayout'
 import CartUserOverCanvas from '../../../Component/OverLay/CartUserOverCanvas'
 import CategoryModalUser from '../../../Component/OverLay/CategoryModalUser'
 import CartEmpty from '../../../Component/Cart/CartEmpty'
+import LoadingSpinner from '../../../Component/Util/ElementRelated/LoadingSpinner'
 
 function Error404() {
    return (
       <UserLayout>
-         <CartUserOverCanvas></CartUserOverCanvas>
+         <LoadingSpinner></LoadingSpinner>
+         <CartUserOverCanvas />
          <CategoryModalUser></CategoryModalUser>
 
          <div className="container">

@@ -14,6 +14,9 @@ import WishListButton from '../../../Component/Other/WishListButton';
 import CardBox from '../../../Component/Util/Box/CardBox';
 import SideProduct from '../../../Component/Products/SideProduct';
 import ListBox from '../../../Component/Util/ElementRelated/ListBox';
+import LoadingSpinner from '../../../Component/Util/ElementRelated/LoadingSpinner';
+import CartUserOverCanvas from '../../../Component/OverLay/CartUserOverCanvas';
+import CategoryModalUser from '../../../Component/OverLay/CategoryModalUser';
 
 function SingleProductView() {
 
@@ -51,7 +54,12 @@ function SingleProductView() {
 
 
     return (
+
         <UserLayout>
+            <LoadingSpinner></LoadingSpinner>
+
+            <CartUserOverCanvas />
+            <CategoryModalUser></CategoryModalUser>
             <Breadcrumb pageName={`Product View / ${thisProduct?.name}`}></Breadcrumb>
 
             <div class="all-product-grid">

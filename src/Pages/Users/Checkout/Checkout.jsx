@@ -14,6 +14,8 @@ import { const_data } from '../../../CONST/const_data'
 import CartUserOverCanvas from '../../../Component/OverLay/CartUserOverCanvas'
 import CoupenCodeApply from '../../../Component/Cart/CoupenCodeApply'
 import { getUserByJwtToken } from '../../../redux/slice/UserSlicer'
+import LoadingSpinner from '../../../Component/Util/ElementRelated/LoadingSpinner'
+import CategoryModalUser from '../../../Component/OverLay/CategoryModalUser'
 
 function Checkout() {
 
@@ -70,7 +72,7 @@ function Checkout() {
                             payment_date: new Date(),
                             order_placed: true,
                         }).then(async (placedOrder) => {
-                            let data = placedOrder.data; 
+                            let data = placedOrder.data;
                             if (data?.status) {
                                 let is_coupen = data?.coupen;
                                 if (is_coupen) {
@@ -150,7 +152,10 @@ function Checkout() {
 
     return (
         <Fragment>
+            <LoadingSpinner></LoadingSpinner>
+
             <CartUserOverCanvas />
+            <CategoryModalUser></CategoryModalUser>
             <UserLayout>
                 <Breadcrumb pageName={"Checkout"}></Breadcrumb>
                 <div className="container mt-5">

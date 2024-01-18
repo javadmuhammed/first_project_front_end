@@ -20,7 +20,7 @@ function ProdctSearchingSideBar() {
 
     let [categoryList, setCategoryList] = useState([]);
     let discountPercentage = ['10', '15', '20', '25', '30', '35', '40', '45', '50', '70'];
-    let [priceRange, setPriceRange] = useState([10, 1000])
+    let [priceRange, setPriceRange] = useState([1, 1000])
     let [discountRange, setDiscountRange] = useState([0, 100])
     let dispatch = useDispatch();
 
@@ -114,7 +114,7 @@ function ProdctSearchingSideBar() {
                                 componentId="priceRanger"
                                 showHistogram={false}
                                 range={{
-                                    start: 10,
+                                    start: 1,
                                     end: 1000,
                                 }}
                                 rangeLabels={{

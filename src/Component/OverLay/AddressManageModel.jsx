@@ -262,7 +262,7 @@ function AddressManageModel({ state }) {
 
                                                         <div class="col-lg-6 col-md-6">
                                                             <div class="form-group">
-                                                                <label class="control-label">Altranative Number </label>
+                                                                <label class="control-label">Altranative Number *</label>
                                                                 <Field className="form-control" name={"altPhoneNumber"} id="altPhoneNumber" placeholder={"Altranative Number"} type={"text"} />
                                                                 <ErrorMessage name="altPhoneNumber" component="div" className="formValidateError" ></ErrorMessage>
 

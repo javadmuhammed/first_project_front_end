@@ -33,7 +33,7 @@ function ProductVariation({ product_id, cart_id, selected_variation = const_data
                     setSelectedVariation(const_data.PRODUCT_VARIATION[valueVariation])
                 } else {
                     setSelectedVariation(valueVariation)
-                    // dispatch(await fetchCartDetails())
+                    dispatch(await fetchCartDetails())
                 }
             } catch (e) {
                 setSelectedVariation(valueVariation)

@@ -12,6 +12,7 @@ let productSearchSlicer = createSlice({
     reducers: {
         setCategory: (state, action) => {
             let category = action.payload.category;
+            
             state.category = category;
         },
         setDiscount: (state, action) => {

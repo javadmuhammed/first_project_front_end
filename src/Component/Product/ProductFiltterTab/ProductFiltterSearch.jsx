@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { productSearchAction } from '../../../redux/slice/ProductSearching'
 import { const_data } from '../../../CONST/const_data';
 
 function ProductFiltterSearch({ title, options, state_filed }) {
     const [optionList, setOptionList] = useState([]);
     const [tempOptionList, setTempOptionList] = useState([]);
-
-    let [selectedItem, setSelectedItems] = useState([]);
-    let dispatch = useDispatch();
+    let productSearchData = useSelector((state) => state.productSearching);
+    let [selectedItem, setSelectedItems] = useState(productSearchData?.category ?? []);
+     let dispatch = useDispatch();
 
 
     function onItemSelect(e) {
-
         let value = e.target.value;
         if (selectedItem.includes(value)) {
             setSelectedItems(selectedItem.filter((item) => item !== value))
@@ -21,9 +20,9 @@ function ProductFiltterSearch({ title, options, state_filed }) {
         }
     }
 
-    useEffect(() => {
+    useEffect(() => { 
         switch (state_filed) {
-            case const_data.PRODUCT_SEARCHING.CATEGORY:
+            case const_data.PRODUCT_SEARCHING.CATEGORY: 
                 dispatch(productSearchAction.setCategory({ category: selectedItem }))
                 break
             case const_data.PRODUCT_SEARCHING.PRICE_BETWEEN:
@@ -31,7 +30,7 @@ function ProductFiltterSearch({ title, options, state_filed }) {
                 break;
             case const_data.PRODUCT_SEARCHING.STOCK_FILTER:
                 dispatch(productSearchAction.setStockFilter({ stock_filter: selectedItem }))
-                break;
+                break; 
         }
     }, [selectedItem])
 
