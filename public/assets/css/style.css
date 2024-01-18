@@ -987,6 +987,7 @@ i.icon1 {
     display: inline-block;
     list-style: none;
     float: left;
+    height: 125px;
 }
 
 .single-cat-item {

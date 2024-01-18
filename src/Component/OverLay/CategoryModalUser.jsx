@@ -1,31 +1,40 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import Image from '../../assets/images/category/icon-1.svg'
 import Image2 from '../../assets/images/category/icon-2.svg'
 import CategoryModalItem from '../CategoryRelated/CategoryModalItem';
+import { getAllCategoryEndPoint } from '../../API/api_request';
+import CategoryHomeItem from '../CategoryRelated/CategoryHomeItem';
+import { Link } from 'react-router-dom';
 
 function CategoryModalUser() {
 
+    let closeRef = useRef();
 
-    let [categoryModalItems, categoryModalItemUpdate] = useState([{
-        url: "#",
-        image: Image,
-        title: "Sample Category"
-    }, {
-        url: "#",
-        image: Image2,
-        title: "Sample Category 2"
-    }, {
-        url: "#",
-        image: Image2,
-        title: "Sample Category 2"
-    }])
+    let [categoryModalItems, categoryModalItemUpdate] = useState([]);
+
+    useEffect(() => {
+        getAllCategoryEndPoint().then((data) => {
+            let response = data?.data;
+            console.log(response)
+            if (response?.status) {
+                let categorys = response?.categorys?.slice(0, 9);
+                categoryModalItemUpdate(categorys)
+            }
+        }).catch((err) => { })
+    }, [])
+
+
+    function onItemSelect() {
+        closeRef.current.click()
+    }
+
     return (
         <Fragment>
             <div id="category_model" className="header-cate-model main-gambo-model modal fade" tabIndex="-1" role="dialog" aria-modal="false">
                 <div className="modal-dialog category-area" role="document">
                     <div className="category-area-inner">
                         <div className="modal-header">
-                            <button type="button" className="close btn-close" data-dismiss="modal" aria-label="Close">
+                            <button ref={closeRef} type="button" className="close btn-close" data-dismiss="modal" aria-label="Close">
                                 <i className="uil uil-multiply"></i>
                             </button>
                         </div>
@@ -38,7 +47,8 @@ function CategoryModalUser() {
                                     categoryModalItems.map(function (categoryItem) {
                                         return (
                                             <li>
-                                                <CategoryModalItem url={categoryItem.url} image={categoryItem.image} title={categoryItem.title} />
+                                                {/* <CategoryHomeItem id={"123"} image={categoryItem?.image} name={"Name"} title={"Hello"}></CategoryHomeItem> */}
+                                                <CategoryModalItem onSelect={onItemSelect} _id={categoryItem?._id} image={categoryItem.image} title={categoryItem.name} />
                                             </li>
                                         )
                                     })
@@ -46,7 +56,7 @@ function CategoryModalUser() {
                                 }
 
                             </ul>
-                            <a href="#" className="morecate-btn"><i className="uil uil-apps"></i>More Categories</a>
+                            <Link to="/category_list" className="morecate-btn"><i className="uil uil-apps"></i>More Categories</Link>
                         </div>
                     </div>
                 </div>

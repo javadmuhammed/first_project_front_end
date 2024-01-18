@@ -95,6 +95,9 @@ function SingleProductView() {
                                                 <p class="stock-qty">Available<span>{
                                                     !isStockAvailable(thisProduct?.stock) ? "Out of stock" : typeof (isStockAvailable(thisProduct?.stock)) != 'boolean' ? isStockAvailable(thisProduct?.stock) : "Product in Stock"
                                                 }</span></p>
+                                                <p class="stock-qty">Category<span>{
+                                                    thisProduct?.category?.name ?? ""
+                                                }</span></p>
                                             </div>
                                             <ProductVariation></ProductVariation>
                                             {/* <div class="product-radio">

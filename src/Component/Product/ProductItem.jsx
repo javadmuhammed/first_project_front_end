@@ -10,7 +10,7 @@ function ProductItem({ product_image, stock, _id, title, sale_price, original_pr
     return (
         <div class="item" id={_id}>
             <div class="product-item">
-                <Link to={"product_view/" + _id} class="product-img">
+                <Link to={"/product_view/" + _id} class="product-img">
                     <img src={product_image} alt="" />
                     <div class="product-absolute-options">
                         <span class="offer-badge-1">{findDiscountPercentage(original_price, sale_price)}% off</span>

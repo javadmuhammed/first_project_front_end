@@ -8,7 +8,7 @@ export let fetchCartDetails = createAsyncThunk("cart/get_data", async (payload) 
 
     try {
         let addToCart = await instance.get(const_data.API_ENDPOINT.get_cart_items)
-      
+
         return addToCart;
     } catch (e) {
         return null;
@@ -56,6 +56,8 @@ export let addToCartThunk = createAsyncThunk("cart/add_item", async (payload, { 
             product_id
         }
         let addToCart = await instance.post(const_data.API_ENDPOINT.add_to_cart, addCartObject)
+         
+        console.log(addToCart)
         return addToCart;
     } catch (e) {
         return null;
@@ -111,8 +113,8 @@ let CartSlicer = createSlice({
                 toast.warning(data?.data?.msg);
             }
         }).addCase(fetchCartDetails.fulfilled, (state, action) => {
-            let data = action?.payload?.data; 
-             
+            let data = action?.payload?.data;
+
             if (data?.status) {
                 state.numberOfItems = data?.cart?.cartData?.length ?? 0;
                 state.cart = data?.cart?.cartData
