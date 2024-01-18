@@ -23,7 +23,7 @@ import EmailTokenVerify from './Pages/Users/Dashboard/EmailTokenVerify'
 import ProductSearching from './Pages/Users/Product/ProductSearching'
 import ViewAllCategory from './Pages/Users/Category/ViewAllCategory'
 import ProtectedRouter from './Component/UserPartials/UserLayout/ProtectedRouter'
-
+import RestrictedRouter from './Component/UserPartials/UserLayout/RestrictedRouter'
 
 function RouterComponent() {
 
@@ -35,11 +35,11 @@ function RouterComponent() {
 
                 <Route path="/" element={<UserHome />}> </Route>
 
-                <Route path="/login" element={<UserLoggin />}> </Route>
-                <Route path="/sign_up/:referal_code?" element={<UserSignup />}> </Route>
-                <Route path="/forget_password" element={<PasswordReset />}> </Route>
-                <Route path="/reset_password/:token" element={<NewPasswordSet />}> </Route>
-                <Route path="/reset_email_address/:token" element={<EmailTokenVerify />}> </Route>
+                <Route path="/login" element={<RestrictedRouter component=<UserLoggin></UserLoggin> />}> </Route>
+                <Route path="/sign_up/:referal_code?" element={<RestrictedRouter component=<UserSignup/> />}> </Route>
+                <Route path="/forget_password" element={<RestrictedRouter component=<PasswordReset/> />}> </Route>
+                <Route path="/reset_password/:token" element={<RestrictedRouter component=<NewPasswordSet/> />}> </Route>
+                <Route path="/reset_email_address/:token" element={<RestrictedRouter component=<EmailTokenVerify/> />}> </Route>
 
 
                 <Route path="/dashboard" element={<ProtectedRouter loggedComponent={<Dashboard />} />}> </Route>
@@ -53,10 +53,10 @@ function RouterComponent() {
                 <Route path="/product_view/:product_id" element={<SingleProductView />}> </Route>
                 <Route path="/product_searching" element={<ProductSearching />}> </Route>
 
-                <Route path="/cart" element={<Cart />}> </Route>
-                <Route path="/checkout" element={<Checkout />}> </Route>
-                <Route path="/view_invoice/:invoice_id" element={<Checkout />}> </Route>
-                <Route path="/order_success/:invoice_id" element={<CheckoutSuccess />}> </Route>
+                <Route path="/cart" element={<ProtectedRouter loggedComponent=<Cart/>  />}> </Route>
+                <Route path="/checkout" element={<ProtectedRouter loggedComponent=<Checkout/>  />}> </Route>
+                {/* <Route path="/view_invoice/:invoice_id" element={<Checkout />}> </Route> */}
+                <Route path="/order_success/:invoice_id" element={<ProtectedRouter loggedComponent=<CheckoutSuccess/>  />}> </Route>
                 <Route path="/invoice_view/:order_id" element={<InvoiceView />}> </Route>
 
                 <Route path="/coupen_list" element={<CoupenList />}> </Route>

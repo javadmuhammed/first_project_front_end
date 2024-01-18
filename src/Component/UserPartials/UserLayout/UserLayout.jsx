@@ -9,7 +9,7 @@ import { getUserByJwtToken, userAction } from '../../../redux/slice/UserSlicer';
 import { getCartItems } from '../../../API/api_request';
 import { fetchCartDetails } from '../../../redux/slice/CartItems';
 import { fetchUserWishlist } from '../../../redux/slice/Wishlist';
-import SetUserAuth from './SetUserAuth';
+
 
 
 function UserLayout(props) {
@@ -19,14 +19,13 @@ function UserLayout(props) {
 
   return (
     <Fragment>
-      <SetUserAuth>
+      
         <UserHeader></UserHeader>
         <div class="wrapper ">
           {props.children}
         </div>
 
-        <Footer></Footer>
-      </SetUserAuth>
+        <Footer></Footer> 
     </Fragment>
   )
 }

@@ -30,6 +30,7 @@ function SetUserAuth({ children }) {
         updateUserWishlist()
     }, [])
 
+ 
 
     let userData;
 
@@ -122,8 +123,9 @@ function SetUserAuth({ children }) {
 
             dispatch(await getUserByJwtToken({ jwt: authData.jwt }))
             dispatch(userAction.setUserAsLogged())
-        } else {
+        } else { 
             console.log("Do not have valid JWT Auth")
+            dispatch(userAction.userLogout())
         }
     }
 

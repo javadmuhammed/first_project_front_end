@@ -17,7 +17,7 @@ function ProductQuanityManager({ product_id, variation }) {
     let navigate = useNavigate();
 
     async function addToCartAction() {
-        if (isLogged) { 
+        if (isLogged) {  
             dispatch(await addToCartThunk({ product_id: product_id, userid: userState?._id, variation: variation }))
             
         } else {
