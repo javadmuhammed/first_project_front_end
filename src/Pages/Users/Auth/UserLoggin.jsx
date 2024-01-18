@@ -60,7 +60,7 @@ function UserLoggin() {
                     // }
 
                     authHelper.setJWTToken(user.data.user.access_token, user.data.user._id)
-                    // authHelper.setUserToLocalStorage(userLocalData)
+                     authHelper.setUserToLocalStorage(userLocalData)
                     dispatcher(await getUserByJwtToken({ jwt: loggedUser?.access_token}))
                     setIsSpinning(false)
                     navigate("/")
