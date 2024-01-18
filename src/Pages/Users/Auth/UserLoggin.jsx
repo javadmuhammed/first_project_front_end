@@ -46,18 +46,18 @@ function UserLoggin() {
 
                     let loggedUser = user.data?.user;
 
-                    // let userLocalData = {
-                    //     username: loggedUser?.username,
-                    //     email: loggedUser?.email,
-                    //     mobile: loggedUser?.mobile,
-                    //     firstName: loggedUser?.first_name,
-                    //     lastName: loggedUser?.last_name,
-                    //     profile_pic: loggedUser?.profile_pic,
-                    //     wallet_amount: loggedUser?.wallet_amount,
-                    //     total_wallet_credit: loggedUser?.total_wallet_credit,
-                    //     last_wallet_update: loggedUser?.last_wallet_update, 
-                    //     referal_code: loggedUser?.referal_code, 
-                    // }
+                    let userLocalData = {
+                        username: loggedUser?.username,
+                        email: loggedUser?.email,
+                        mobile: loggedUser?.mobile,
+                        firstName: loggedUser?.first_name,
+                        lastName: loggedUser?.last_name,
+                        profile_pic: loggedUser?.profile_pic,
+                        wallet_amount: loggedUser?.wallet_amount,
+                        total_wallet_credit: loggedUser?.total_wallet_credit,
+                        last_wallet_update: loggedUser?.last_wallet_update, 
+                        referal_code: loggedUser?.referal_code, 
+                    }
 
                     authHelper.setJWTToken(user.data.user.access_token, user.data.user._id)
                      authHelper.setUserToLocalStorage(userLocalData)
