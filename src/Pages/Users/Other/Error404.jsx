@@ -7,11 +7,8 @@ import LoadingSpinner from '../../../Component/Util/ElementRelated/LoadingSpinne
 
 function Error404() {
    return (
-      <UserLayout>
-         <LoadingSpinner></LoadingSpinner>
-         <CartUserOverCanvas />
-         <CategoryModalUser></CategoryModalUser>
-
+      <div>
+         
          <div className="container">
             <div className='cartEmpty' style={{ backgroundColor: "white" }}>
                <img width={"200px"} src="assets/images/error-404.png" alt="" srcset="" />
@@ -19,7 +16,7 @@ function Error404() {
                <p>We have found something went wrong</p>
             </div>
          </div>
-      </UserLayout>
+      </div>
    )
 }
 

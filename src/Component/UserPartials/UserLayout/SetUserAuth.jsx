@@ -11,26 +11,26 @@ function SetUserAuth({ children }) {
 
 
 
+   
+
 
     let dispatch = useDispatch();
     let isLogged = useSelector((state) => state.userAuth.isLogged)
     let cartData = useSelector((state) => state.userCart);
 
 
-    async function updateUserCart() {
-        dispatch(await fetchCartDetails())
-    }
 
     async function updateUserWishlist() {
         dispatch(await fetchUserWishlist())
     }
 
     useEffect(() => {
-        // updateUserCart();
-        updateUserWishlist()
+        if (isLogged) {
+            updateUserWishlist() 
+        }
     }, [])
 
- 
+
 
     let userData;
 
@@ -46,15 +46,26 @@ function SetUserAuth({ children }) {
         reference: userData?.reference
     }
 
+    
+     
+    
+
    
+
+
 
     instance.interceptors.response.use(
         (response) => response,
         async (error) => {
             if (error?.response?.status == 403) {
 
+
+                // alert("Worked")
+
                 try {
                     userData = JSON.parse(localStorage.getItem("auth"));
+
+                    // alert(userData.jwt)
 
                     let authData = {
                         jwt: userData?.jwt,
@@ -67,6 +78,7 @@ function SetUserAuth({ children }) {
                         if (refreshData.data?.status) {
                             authData.jwt = refreshData.data.token;
                             authHelper.setJWTToken(authData.jwt, authData.reference)
+                            // alert("Hello world")
                             setUser()
                         } else {
                             dispatch(userAction.userLogout())
@@ -105,6 +117,9 @@ function SetUserAuth({ children }) {
         authData.jwt = userData?.jwt;
         authData.reference = userData?.reference;
 
+
+
+
         if (userData?.jwt) {
 
             // console.log("Profile data :",profileData)
@@ -121,15 +136,20 @@ function SetUserAuth({ children }) {
                 last_wallet_update: profileData?.user?.last_wallet_update,
             }
 
+            // alert("This work")
+            authHelper.setHeaderRequest(authData.jwt , authData.reference)
             dispatch(await getUserByJwtToken({ jwt: authData.jwt }))
-            dispatch(userAction.setUserAsLogged())
-        } else { 
+            // dispatch(userAction.setUserAsLogged())
+        } else {
             console.log("Do not have valid JWT Auth")
             dispatch(userAction.userLogout())
         }
     }
 
-    if (!isLogged) setUser()
+    if (!isLogged) {
+        authHelper.setHeaderRequest(authData.jwt, authData.reference);
+        setUser()
+    }
 
     return (
         <>

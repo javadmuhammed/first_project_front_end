@@ -10,6 +10,7 @@ import { const_data } from '../../../CONST/const_data'
 import ComponentHelper from '../../../helper/ComponentHelper'
 import * as Yup from 'yup'
 import LoadingSpinner from '../../../Component/Util/ElementRelated/LoadingSpinner'
+import { Link } from 'react-router-dom'
 
 function PasswordReset() {
 
@@ -66,7 +67,7 @@ function PasswordReset() {
 
                     </div>
                     <div className="alertSignUp mt-3">
-                        <a href="" className='anchorWhite'>Don't have an account? - </a>
+                        <Link to="/sign_up" className='anchorWhite'>Don't have an account? - </Link>
                         <BlackButton type="a" href={"/sign_up"} title="Sign up now"></BlackButton>
                     </div>
                 </SimpleBox>

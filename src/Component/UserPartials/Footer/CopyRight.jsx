@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import { Link } from 'react-router-dom'
 
 function CopyRight() {
     return (
@@ -7,11 +8,11 @@ function CopyRight() {
                 <div className="col-md-12">
                     <div className="footer-bottom-links">
                         <ul>
-                            <li><a href="about_us.html">About</a></li>
-                            <li><a href="contact_us.html">Contact</a></li>
-                            <li><a href="privacy_policy.html">Privacy Policy</a></li>
-                            <li><a href="term_and_conditions.html">Term & Conditions</a></li>
-                            <li><a href="refund_and_return_policy.html">Refund & Return Policy</a></li>
+                            <li><Link href="">About</Link></li>
+                            <li><Link href="">Contact</Link></li>
+                            <li><Link href="">Privacy Policy</Link></li>
+                            <li><Link href="">Term & Conditions</Link></li>
+                            <li><Link href="">Refund & Return Policy</Link></li>
                         </ul>
                     </div>
                     <div className="copyright-text">

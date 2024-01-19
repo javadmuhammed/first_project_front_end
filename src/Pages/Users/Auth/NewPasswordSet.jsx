@@ -5,7 +5,7 @@ import InputOne from '../../../Component/Util/Input/InputOne'
 import Button1 from '../../../Component/Util/Buttons/Button1'
 import BlackButton from '../../../Component/Util/Buttons/BlackButton'
 import CopyRight from '../../../Component/UserPartials/Footer/CopyRight'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { UpdatePassword } from '../../../API/api_request'
 import ComponentHelper from '../../../helper/ComponentHelper'
 import { const_data } from '../../../CONST/const_data'
@@ -83,7 +83,7 @@ function NewPasswordSet() {
                         </form>
                     </div>
                     <div className="alertSignUp mt-3">
-                        <a href="" className='anchorWhite'>Don't have an account? - </a>
+                        <Link to="sign_up" className='anchorWhite'>Don't have an account? - </Link>
                         <BlackButton type="a" href={"/sign_up"} title="Sign up now"></BlackButton>
                     </div>
                 </SimpleBox>

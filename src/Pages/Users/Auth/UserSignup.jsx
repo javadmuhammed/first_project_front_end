@@ -6,7 +6,7 @@ import Button1 from '../../../Component/Util/Buttons/Button1'
 import BlackButton from '../../../Component/Util/Buttons/BlackButton'
 import CopyRight from '../../../Component/UserPartials/Footer/CopyRight'
 import { userOtpValidationForSignup, userSignUpRequest } from '../../../API/api_request'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import ComponentHelper from '../../../helper/ComponentHelper'
 import { const_data } from '../../../CONST/const_data'
 import * as Yup from 'yup';
@@ -154,7 +154,7 @@ function UserSignup() {
                         </form>
                     </div>
                     <div className="alertSignUp mt-3">
-                        <a href="" className='anchorWhite'>Already have an account?  </a>
+                        <Link to="" className='anchorWhite'>Already have an account?  </Link>
                         <BlackButton type="a" href={"/login"} title="Sign in now"></BlackButton>
                     </div>
                 </SimpleBox>

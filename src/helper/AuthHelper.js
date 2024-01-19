@@ -3,6 +3,7 @@ import instance from "../axios/instance";
 
 let authHelper = {
     setJWTToken: function (jwt, reference) {
+ 
         let userData;
         try {
             userData = JSON.parse(localStorage.getItem("auth"))
@@ -35,8 +36,10 @@ let authHelper = {
     },
 
 
-    setHeaderRequest: (jwt,reference) => {
- 
+    setHeaderRequest: (jwt, reference) => {
+
+    
+
         instance.interceptors.request.use(function (config) {
 
             const jwtHeaderValue = "Bearer " + encodeURIComponent(jwt);

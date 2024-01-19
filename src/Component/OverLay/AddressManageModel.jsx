@@ -27,12 +27,12 @@ function AddressManageModel({ state }) {
         houseName: Yup.string().required('House name is required'),
         city: Yup.string().required('City is required'),
         state: Yup.string().required('State is required'),
-        pincode: Yup.string()
+        pincode: Yup.number("Please enter valid Pin code")
             .required('Pincode is required')
             .matches(/^\d{6}$/, 'Pincode must be 6 digits'),
         landmark: Yup.string().required("Landmark is required"),
         phoneNumber: Yup.string().matches(/^\d{10}$/, 'Phone number must be 10 digits').required("Phone number is required"),
-        altPhoneNumber: Yup.string().matches(/^\d{10}$/, 'Alternate phone number must be 10 digits'),
+        altPhoneNumber: Yup.string().required("Alternative number is required").matches(/^\d{10}$/, 'Alternate phone number must be 10 digits'),
         email: Yup.string().email('Invalid email address').required("Email address required"),
         address: Yup.string().required('Address is required'),
     });

@@ -9,6 +9,7 @@ export let getUserByJwtToken = createAsyncThunk("user/get_user_by_jwt", async (p
     // alert(payload.jwt)
     try {
         let user = await instance.get(const_data.API_ENDPOINT.get_user_by_jwt + "/" + payload.jwt)
+        console.log(user)
         return user
     } catch (e) {
         return null;
@@ -26,7 +27,7 @@ let userSlicer = createSlice(
         },
         reducers: {
             setUserAsLogged: (state, action) => {
-                state.isLoading= false;
+                state.isLoading = false;
                 state.isLogged = true;
             },
             updateUser: (state, action) => {
@@ -43,12 +44,22 @@ let userSlicer = createSlice(
         extraReducers: (builder) => {
             builder.addCase(getUserByJwtToken.fulfilled, (state, action) => {
                 let response = action.payload?.data;
-                console.log(response.user)
+                console.log(response);
+                
+
                 if (response?.status) {
                     state.isLoading = false;
                     state.isLogged = true;
                     state.user = response?.user
+                }else{
+                    state.isLoading = false;
+                    state.isLogged = false;
+                    state.user = {}
                 }
+            }).addCase(getUserByJwtToken.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isLogged = false;
+                state.user = {}
             })
         }
 

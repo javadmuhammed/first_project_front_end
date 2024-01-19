@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function FooterTab(props) {
     console.log(props.link)
@@ -8,7 +9,7 @@ function FooterTab(props) {
             <ul>
                 {
                     props.link.map(function(item){
-                        return <li><a href={item.link}>{item.title}</a></li>
+                        return <li><Link to={item.link}>{item.title}</Link></li>
                     })
                 }
             </ul>

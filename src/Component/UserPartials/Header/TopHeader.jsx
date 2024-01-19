@@ -27,7 +27,7 @@ function TopHeader() {
                                      <i className="uil uil-phone-alt"></i>+91 9744727684 
                                 </li>
                                 <li>
-                                    <a href="offers.html" className="offer-link"><i className="uil uil-gift"></i>Offers</a>
+                                    <Link href="offers.html" className="offer-link"><i className="uil uil-gift"></i>Offers</Link>
                                 </li>
                                 <li>
                                     <Link to="/wishlist" className="option_links" title="Wishlist"><i className='uil uil-heart icon_wishlist'></i> </Link>

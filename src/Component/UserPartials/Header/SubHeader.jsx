@@ -20,8 +20,8 @@ function SubHeader() {
                                 <div className="collapse navbar-collapse d-flex flex-column flex-lg-row flex-xl-row justify-content-lg-end bg-dark1 p-3 p-lg-0 mt1-5 mt-lg-0 mobileMenu" id="navbarSupportedContent">
                                     <ul className="navbar-nav main_nav align-self-stretch">
                                         <li className="nav-item"><Link to="/" className="nav-link active" title="Home">Home</Link></li>
-                                        <li className="nav-item"><a href="/product_searching" className="nav-link new_item" title="New Products">All Products</a></li>
-                                         <li className="nav-item"><a href="contact_us.html" className="nav-link" title="Contact">Contact Us</a></li>
+                                        <li className="nav-item"><Link to="/product_searching" className="nav-link new_item" title="New Products">All Products</Link></li>
+                                         <li className="nav-item"><Link to="contact_us.html" className="nav-link" title="Contact">Contact Us</Link></li>
                                     </ul>
                                 </div>
                             </div>

@@ -17,6 +17,7 @@ function CartUserOverCanvas() {
 
     useEffect(() => {
         if (userAuth?.isLogged) {  
+            // alert("Hello world")
             dispatch(fetchCartDetails());
         } 
     }, [cartData?.cart_update,userAuth])
