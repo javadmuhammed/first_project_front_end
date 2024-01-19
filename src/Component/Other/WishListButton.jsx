@@ -3,7 +3,7 @@ import { addToWishListHelper } from '../../helper/HelperFunction'
 import { toast } from 'react-toastify'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { addToWishListThunk, removeFromWishlistThunk } from '../../redux/slice/Wishlist'
+import { addToWishListThunk, fetchUserWishlist, removeFromWishlistThunk } from '../../redux/slice/Wishlist'
 
 function WishListButton({ product_id, is_save_icon }) {
 
@@ -13,38 +13,38 @@ function WishListButton({ product_id, is_save_icon }) {
 
 
     let isUserLogged = useSelector((state) => state.userAuth.isLogged);
-    let wishListItems = useSelector((state) => state.userWishlist.wishlist_items) ?? []
+    let wishListItems = useSelector((state) => state.userWishlist) 
 
 
-    let [isInclude, setIsInclude] = useState(false);
+    let [isInclude, setIsInclude] = useState(is_save_icon);
 
     useEffect(() => {
-        setIsInclude(wishListItems.includes(product_id))
-    })
+        setIsInclude(wishListItems?.wishlist_items.some((item) => item?.product_id?._id == product_id))
+    }, [])
+
+    
 
     async function wishlistControl() {
 
+
+
+
         if (isUserLogged) {
-            if (isInclude) {
-                
+            if (isInclude) {  
                 try {
-                    let wishlist = dispatch(await removeFromWishlistThunk({ product_id })) //await addToWishListHelper(product_id)
-
-                    if (wishlist) { 
-                        setIsInclude(false)
-                    }
+                    dispatch(await removeFromWishlistThunk({ product_id })) //await addToWishListHelper(product_id)
+                    // toast.success("Removed from wishlist") 
+                    setIsInclude(false)
                 } catch (e) { }
-            } else {
+            } else { 
                 try {
-                    let wishlist = dispatch(await addToWishListThunk({ product_id })) //await addToWishListHelper(product_id)
-
-                    if (wishlist) {
-                        toast.success("Item addedd to wishlist")
-                        setIsInclude(true)
-                    }
+                    // alert(product_id)
+                    dispatch(await addToWishListThunk({ product_id })) 
+                    // dispatch(await fetchUserWishlist()) 
+                    // toast.success("Item addedd to wishlist")
+                    setIsInclude(true)
                 } catch (e) { }
             }
-
         } else {
             navigate("/login")
         }
@@ -53,7 +53,8 @@ function WishListButton({ product_id, is_save_icon }) {
 
     return (
         <Fragment>
-            <span className={"wishlitsIcon " + (is_save_icon ? "save-icon" : "") + (isInclude ? " liked" : "")} onClick={wishlistControl} title="wishlist"></span>
+            {/* {isInclude ? "Y" : " N"} */}
+            <span className={"wishlitsIcon " + (isInclude ? "save-icon liked" : "") + (isInclude ? " liked" : "")} onClick={wishlistControl} title="wishlist"></span>
         </Fragment>
     )
 }

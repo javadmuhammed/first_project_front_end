@@ -24,8 +24,8 @@ function NewPasswordSet() {
     let [isSpinning,setIsSpinning] = useState(false);
 
     let newPasswordValidation = Yup.object().shape({
-        password: Yup.string().required("Password is required").min(6, 'Password must be at least 6 characters'),
-        cpassword: Yup.string().required("Confirm password is required").oneOf([Yup.ref("password"), null], 'Password should be match').min(6, 'Password must be at least 6 characters'),
+        password: Yup.string().trim().required("Password is required").min(6, 'Password must be at least 6 characters'),
+        cpassword: Yup.string().trim().required("Confirm password is required").oneOf([Yup.ref("password"), null], 'Password should be match').min(6, 'Password must be at least 6 characters'),
     })
 
 

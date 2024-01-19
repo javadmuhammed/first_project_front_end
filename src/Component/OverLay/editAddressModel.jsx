@@ -23,20 +23,20 @@ function EditAddressModel({ address_id, data_target, address_data }) {
 
 
     const addressValidation = Yup.object().shape({
-        addressType: Yup.string().required('Address type is required'),
-        name: Yup.string().required('Name is required'),
-        houseName: Yup.string().required('House name is required'),
-        city: Yup.string().required('City is required'),
-        state: Yup.string().required('State is required'),
-        pincode: Yup.string()
+        addressType: Yup.string().trim().required('Address type is required'),
+        name: Yup.string().trim().required('Name is required'),
+        houseName: Yup.string().trim().required('House name is required'),
+        city: Yup.string().trim().required('City is required'),
+        state: Yup.string().trim().required('State is required'),
+        pincode: Yup.string().trim()
             .required('Pincode is required')
             .matches(/^\d{6}$/, 'Pincode must be 6 digits'),
-        landmark: Yup.string().required("Landmark is required"),
-        phoneNumber: Yup.string().matches(/^\d{10}$/, 'Phone number must be 10 digits').required("Phone number is required"),
-        AltphoneNumber: Yup.string().required("Alternative number is required").matches(/^\d{10}$/, 'Alternate phone number must be 10 digits'),
-        email: Yup.string().email('Invalid email address').required("Email address required"),
-        address: Yup.string().required('Address is required'),
-    });
+        landmark: Yup.string().trim().required("Landmark is required"),
+        phoneNumber: Yup.string().trim().matches(/^\d{10}$/, 'Phone number must be 10 digits').required("Phone number is required"),
+        AltphoneNumber: Yup.string().trim().required("Alternative number is required").matches(/^\d{10}$/, 'Alternate phone number must be 10 digits'),
+        email: Yup.string().trim().email('Invalid email address').required("Email address required"),
+        address: Yup.string().trim().required('Address is required'),
+    })
 
     function onAddressFormSubmit() {
 

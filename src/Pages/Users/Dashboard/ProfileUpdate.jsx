@@ -42,19 +42,16 @@ function ProfileUpdate() {
     let [cpasswordState, cpasswordStateUpdater] = useState()
     let [currentPassword, currentPasswordUpdater] = useState()
 
-    let basicProfileHandling = Yup.object().shape({
-        firstName: Yup.string(),
-        lastName: Yup.string(),
-    })
+     
 
     let phoneNumberValidator = Yup.object().shape({
-        phone_number: Yup.string("Please enter valid number")
+        phone_number: Yup.string("Please enter valid number").trim()
             .matches(/^\d{10}$/, "Please enter a 10-digit number")
             .required("Phone number is required")
     })
 
     let basicProfileValidation = Yup.object().shape({
-        first_name: Yup.string("Please enter valid string").required("First name is required"),
+        first_name: Yup.string("Please enter valid string").trim().required("First name is required"),
         last_name: Yup.string("Please enter valid last name")
     })
 
@@ -67,9 +64,9 @@ function ProfileUpdate() {
     })
 
     let passwordValidation = Yup.object().shape({
-        current_password: Yup.string().required("Current Password is required").min(6, 'Password must be at least 6 characters'),
-        password: Yup.string().required("Password is required").min(6, 'Password must be at least 6 characters'),
-        cpassword: Yup.string().required("Confirm password is required").oneOf([Yup.ref("password"), null], 'Password should be match').min(6, 'Password must be at least 6 characters'),
+        current_password: Yup.string().trim().required("Current Password is required").min(6, 'Password must be at least 6 characters'),
+        password: Yup.string().trim().required("Password is required").min(6, 'Password must be at least 6 characters'),
+        cpassword: Yup.string().trim().required("Confirm password is required").oneOf([Yup.ref("password"), null], 'Password should be match').min(6, 'Password must be at least 6 characters'),
     })
 
 

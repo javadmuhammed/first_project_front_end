@@ -16,9 +16,17 @@ export async function userLoginRequest(user) {
     return await instance.post(const_data.API_ENDPOINT.loggin_user, user)
 }
 
+export async function wishlistToCart(variation,product_id) {
+    return await instance.post(const_data.API_ENDPOINT.loggin_user, { 
+        variation: variation,
+        product_id
+    })
+}
 
 export async function getUserByJwt(jwt) {
-    return await instance.get(const_data.API_ENDPOINT.get_user_by_jwt+"/"+jwt)
+    return await instance.get(const_data.API_ENDPOINT.wishlist_to_cart, {
+
+    })
 }
 
 export async function passwordResetRequest(email) {

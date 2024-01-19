@@ -18,7 +18,7 @@ export let removeFromWishlistThunk = createAsyncThunk("user/remove_wishlist", as
     try {
         let product_id = payload.product_id;
         let wishlist = await instance.delete(const_data.API_ENDPOINT.delete_wishlist + "/" + product_id)
-        console.log(wishlist)
+
         return wishlist;
     } catch (e) {
         return null;
@@ -26,10 +26,25 @@ export let removeFromWishlistThunk = createAsyncThunk("user/remove_wishlist", as
 })
 
 
+export let wishlistSendToCartThunk = createAsyncThunk("user/send_to_cart", async (payload) => {
+    try {
+        let product_id = payload.product_id;
+        let variation = payload.variation;
+
+        let sentToCart = await instance.post(const_data.API_ENDPOINT.wishlist_to_cart, {
+            variation,
+            product_id
+        })
+        return sentToCart;
+    } catch (e) {
+        return null;
+    }
+})
+
 export let fetchUserWishlist = createAsyncThunk("user/fetch_wishlist", async (payload, { dispatch }) => {
     try {
         let wishlist = await instance.get(const_data.API_ENDPOINT.get_wishlist)
-        console.log(wishlist)
+
         return wishlist;
     } catch (e) {
         return null;
@@ -40,40 +55,40 @@ export let fetchUserWishlist = createAsyncThunk("user/fetch_wishlist", async (pa
 export let WishlistSlicer = createSlice({
     name: "wishlist",
     initialState: {
-        wishlist_items: []
+        wishlist_items: [],
+        refresh_required: true,
     },
     extraReducers: (builder) => {
-        builder.addCase(addToWishListThunk.fulfilled, (state, action) => {
-
-            let payload = action.payload;
-            let response = payload?.data;
-            console.log(response)
-            let product_id = response?.product_id;
-            if (response?.status) {
-                state.wishlist_items = [...state.wishlist_items, product_id];
-            }
-
-        }).addCase(removeFromWishlistThunk.fulfilled, (state, action) => {
+        builder.addCase(removeFromWishlistThunk.fulfilled, (state, action) => {
             let payload = action.payload;
             let response = payload?.data;
             let product_id = response?.product_id;
             if (response?.status) {
-                let isInclude = state.wishlist_items.includes(product_id);
-                console.log(product_id)
-                if (isInclude) {
-                    let filtter = state.wishlist_items.filter((each) => each != product_id);
-                    state.wishlist_items = filtter;
-                }
+                let filtter = state.wishlist_items.filter(function (each) {
+                    return each?.product_id?._id != product_id
+                });
+
+                state.wishlist_items = filtter;
             }
         }).addCase(fetchUserWishlist.fulfilled, (state, action) => {
             let payload = action.payload;
             let response = payload?.data;
-            console.log(response)
             if (response?.status) {
                 let wishlist = response?.wishlist;
-                let wish_products = wishlist.map(item => item.product_id._id);
+                state.wishlist_items = wishlist;
+                state.refresh_required=false;
+            }
+        }).addCase(addToWishListThunk.fulfilled, (state, action) => {
+            state.refresh_required = true;
+        }).addCase(wishlistSendToCartThunk.fulfilled, (state, action) => {
+            let payload = action.payload;
+            let response = payload?.data;
+            if (response?.status) {
+                let deleted_item = response?.product_id;
+
+
+                let wish_products = state.wishlist_items.filter((each) => each.product_id._id != deleted_item);
                 state.wishlist_items = wish_products;
-                console.log(wish_products)
             }
         })
     }

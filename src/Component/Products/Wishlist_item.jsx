@@ -2,9 +2,12 @@ import React from 'react'
 import AddtoCartBtn from '../Util/Buttons/AddtoCartBtn'
 import ProductQuanityManager from '../Other/ProductQuanityManager'
 import { useDispatch } from 'react-redux'
-import { removeFromWishlistThunk } from '../../redux/slice/Wishlist';
+import { removeFromWishlistThunk, wishlistSendToCartThunk } from '../../redux/slice/Wishlist';
+import { wishlistToCart } from '../../API/api_request';
+import { const_data } from '../../CONST/const_data';
+import { toast } from 'react-toastify';
 
-function Wishlist_item({ category, productImage, offer, title, sale_price, originalPrice, product_id,onDelete }) {
+function Wishlist_item({ category, productImage, offer, title, sale_price, originalPrice, product_id, onDelete }) {
 
 
     let dispatch = useDispatch();
@@ -12,6 +15,16 @@ function Wishlist_item({ category, productImage, offer, title, sale_price, origi
     async function onItemDelete() {
         dispatch(await removeFromWishlistThunk({ product_id }))
         onDelete(product_id);
+    }
+
+    async function sentToCart() {
+        try {
+            dispatch(await wishlistSendToCartThunk({ product_id: product_id, variation: const_data.PRODUCT_VARIATION['1kg'] }))
+            toast.success("Product sented to cart")
+        } catch (e) {
+
+        }
+
     }
 
 
@@ -26,8 +39,8 @@ function Wishlist_item({ category, productImage, offer, title, sale_price, origi
                     <h4>{title}</h4>
                     <div class="cart-item-price">{sale_price} <span>{originalPrice}</span></div>
                     <div className='mt-3'>
-                        <ProductQuanityManager currentValue={0} product_id={product_id} ></ProductQuanityManager>
-                        {/* <AddtoCartBtn onClick={() => { }}></AddtoCartBtn> */}
+                        {/* <ProductQuanityManager currentValue={0} product_id={product_id} ></ProductQuanityManager> */}
+                        <AddtoCartBtn onClick={sentToCart}></AddtoCartBtn>
                     </div>
                 </div>
                 <button onClick={onItemDelete} type="button" class="cart-close-btn"><i class="uil uil-trash-alt"></i></button>

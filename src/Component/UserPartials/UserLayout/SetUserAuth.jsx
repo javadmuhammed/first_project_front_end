@@ -1,36 +1,31 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCartDetails } from '../../../redux/slice/CartItems';
 import { fetchUserWishlist } from '../../../redux/slice/Wishlist';
 import instance from '../../../axios/instance';
 import { const_data } from '../../../CONST/const_data';
 import authHelper from '../../../helper/AuthHelper';
 import { getUserByJwtToken, userAction } from '../../../redux/slice/UserSlicer';
+import { fetchCartDetails } from '../../../redux/slice/CartItems';
 
 function SetUserAuth({ children }) {
 
 
 
-   
-
-
     let dispatch = useDispatch();
     let isLogged = useSelector((state) => state.userAuth.isLogged)
     let cartData = useSelector((state) => state.userCart);
-
-
-
-    async function updateUserWishlist() {
-        dispatch(await fetchUserWishlist())
-    }
+    let wishListItems = useSelector((state) => state.userWishlist) 
 
     useEffect(() => {
         if (isLogged) {
-            updateUserWishlist() 
+            dispatch(fetchCartDetails());
         }
-    }, [])
+    }, [cartData?.cart_update, isLogged])
 
 
+    useEffect(()=>{ 
+        dispatch(fetchUserWishlist())
+    },[wishListItems.refresh_required])
 
     let userData;
 
@@ -46,11 +41,11 @@ function SetUserAuth({ children }) {
         reference: userData?.reference
     }
 
-    
-     
-    
 
-   
+
+
+
+
 
 
 
@@ -78,7 +73,6 @@ function SetUserAuth({ children }) {
                         if (refreshData.data?.status) {
                             authData.jwt = refreshData.data.token;
                             authHelper.setJWTToken(authData.jwt, authData.reference)
-                            // alert("Hello world")
                             setUser()
                         } else {
                             dispatch(userAction.userLogout())
@@ -118,8 +112,6 @@ function SetUserAuth({ children }) {
         authData.reference = userData?.reference;
 
 
-
-
         if (userData?.jwt) {
 
             // console.log("Profile data :",profileData)
@@ -137,9 +129,9 @@ function SetUserAuth({ children }) {
             }
 
             // alert("This work")
-            authHelper.setHeaderRequest(authData.jwt , authData.reference)
+            authHelper.setHeaderRequest(authData.jwt, authData.reference)
             dispatch(await getUserByJwtToken({ jwt: authData.jwt }))
-            // dispatch(userAction.setUserAsLogged())
+            // dispatch(await fetchUserWishlist())
         } else {
             console.log("Do not have valid JWT Auth")
             dispatch(userAction.userLogout())

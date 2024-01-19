@@ -23,18 +23,16 @@ function AddressManageModel({ state }) {
 
     const addressValidation = Yup.object().shape({
         //addressType: Yup.string().required('Address type is required'),
-        name: Yup.string().required('Name is required'),
-        houseName: Yup.string().required('House name is required'),
-        city: Yup.string().required('City is required'),
-        state: Yup.string().required('State is required'),
-        pincode: Yup.number("Please enter valid Pin code")
-            .required('Pincode is required')
-            .matches(/^\d{6}$/, 'Pincode must be 6 digits'),
-        landmark: Yup.string().required("Landmark is required"),
-        phoneNumber: Yup.string().matches(/^\d{10}$/, 'Phone number must be 10 digits').required("Phone number is required"),
-        altPhoneNumber: Yup.string().required("Alternative number is required").matches(/^\d{10}$/, 'Alternate phone number must be 10 digits'),
-        email: Yup.string().email('Invalid email address').required("Email address required"),
-        address: Yup.string().required('Address is required'),
+        name: Yup.string().trim().required('Name is required'),
+        houseName: Yup.string().trim().required('House name is required'),
+        city: Yup.string().trim().required('City is required'),
+        state: Yup.string().trim().required('State is required'),
+        pincode: Yup.number("Please enter valid Pin code").required('Pincode is required'),
+        landmark: Yup.string().trim().required("Landmark is required"),
+        phoneNumber: Yup.string().trim().matches(/^\d{10}$/, 'Phone number must be 10 digits').required("Phone number is required"),
+        altPhoneNumber: Yup.string().trim().matches(/^\d{10}$/, 'Alternate phone number must be 10 digits').required("Alternative number is required"),
+        email: Yup.string().trim().email('Invalid email address').required("Email address required"),
+        address: Yup.string().trim().required('Address is required'),
     });
 
     let initAddress = {
@@ -75,7 +73,7 @@ function AddressManageModel({ state }) {
                 state((prev) => [...prev, address])
                 toast.success("Address successfuly created")
                 closeRef.current.click();
-                // resetForm();
+                resetForm();
             } else {
                 toast.error(response.msg)
             }
@@ -156,10 +154,10 @@ function AddressManageModel({ state }) {
                                                                             <input
                                                                                 type="radio"
                                                                                 onClick={() => { addressTypeStateUpdate(each) }}
-                                                                                id="ad1"
+                                                                                id={"ad1" + each}
                                                                                 name="address1"
                                                                                 {...(each === addressTypeState ? { checked: true } : {})}
-                                                                            />                                                                            <label for="ad1">{each}  </label>
+                                                                            />                                                                            <label for={"ad1" + each}>{each}  </label>
                                                                         </li>)
                                                                     })
                                                                 }

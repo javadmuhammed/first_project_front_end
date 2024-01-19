@@ -19,7 +19,7 @@ function PasswordReset() {
     let [isSpinnerShow, setIsSpinnerShow] = useState(false);
 
     let passwordResetValidation = Yup.object().shape({
-        email: Yup.string().email().required("Email address is required")
+        email: Yup.string().trim().email("Please enter valid email address").required("Email address is required")
     })
 
     function onEmailChange(e, state) {

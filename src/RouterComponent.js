@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter as Routers, Routes, Route, useParams } from 'react-router-dom'
+import { BrowserRouter as Routers, Routes, Route } from 'react-router-dom'
 import UserHome from './Pages/Users/UserHome'
 import UserLoggin from './Pages/Users/Auth/UserLoggin'
 import UserSignup from './Pages/Users/Auth/UserSignup'
@@ -55,7 +55,6 @@ function RouterComponent() {
 
                 <Route path="/cart" element={<ProtectedRouter loggedComponent=<Cart/>  />}> </Route>
                 <Route path="/checkout" element={<ProtectedRouter loggedComponent=<Checkout/>  />}> </Route>
-                {/* <Route path="/view_invoice/:invoice_id" element={<Checkout />}> </Route> */}
                 <Route path="/order_success/:invoice_id" element={<ProtectedRouter loggedComponent=<CheckoutSuccess/>  />}> </Route>
                 <Route path="/invoice_view/:order_id" element={<InvoiceView />}> </Route>
 
@@ -63,7 +62,7 @@ function RouterComponent() {
 
 
                 <Route path="/category_list" element={<ViewAllCategory />}> </Route>
-                <Route path="*" element={<Error404 />}> </Route>
+                <Route path="*" element={<Error404 />} status={404}> </Route>
 
 
             </Routes>

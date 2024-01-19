@@ -10,17 +10,11 @@ import { fetchCartDetails, removeFromCart } from '../../redux/slice/CartItems'
 
 function CartUserOverCanvas() {
 
-    let cartData = useSelector((state) => state.userCart);
-    let userAuth = useSelector((state) => state.userAuth);
+    let cartData = useSelector((state) => state.userCart); 
     let dispatch = useDispatch();
 
 
-    useEffect(() => {
-        if (userAuth?.isLogged) {  
-            // alert("Hello world")
-            dispatch(fetchCartDetails());
-        } 
-    }, [cartData?.cart_update,userAuth])
+
 
 
 

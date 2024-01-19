@@ -25,8 +25,8 @@ function UserLoggin() {
 
 
     let loginValidation = Yup.object().shape({
-        username: Yup.string().required("Username is required"),
-        password: Yup.string().required("Password is required")
+        username: Yup.string().trim().required("Username is required"),
+        password: Yup.string().trim().required("Password is required")
     })
 
     let dispatcher = useDispatch()

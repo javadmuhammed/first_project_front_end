@@ -29,6 +29,7 @@ export const const_data = {
         get_user_wallet_history: "/user_wallet",
         get_wishlist: "/get_wishlist",
         add_wishlist: "/add_wishlist",
+        wishlist_to_cart: "/wishlist_to_cart",
         delete_wishlist: "/delete_wishlist",
         user_password_update: "/update_password",
         profile_pic_update: "/update_profile_image",

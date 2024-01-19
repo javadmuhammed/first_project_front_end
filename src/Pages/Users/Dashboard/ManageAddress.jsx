@@ -5,6 +5,7 @@ import FullBox from '../../../Component/Util/Box/FullBox'
 import AdressItem from '../../../Component/Other/AdressItem'
 import AddressManageModel from '../../../Component/OverLay/AddressManageModel'
 import { deleteAddress, getUserAddress } from '../../../API/api_request'
+import EmptyScreen from '../../../Component/Util/Box/EmptyScreen'
 
 function ManageAddress() {
 
@@ -44,12 +45,15 @@ function ManageAddress() {
       <FullBox withoutFooter={true} title={<h4>My Address</h4>}>
         <a href="#" class="add-address hover-btn mt-0" data-toggle="modal" data-target="#address_model">Add New Address</a>
         {
-          addressList.map((addressItem) => { 
-            return <AdressItem address_data={addressItem} onUpdate={fetchUserAddress} address_id={addressItem._id} is_primary={addressItem.is_primary} address={addressItem?.address} type={addressItem?.type} onDelete={() => {
-              onDeleteAddress(addressItem._id)
-            }} ></AdressItem>
-          })
+          addressList?.length > 0 ? (
+            addressList.map((addressItem) => {
+              return <AdressItem address_data={addressItem} onUpdate={fetchUserAddress} address_id={addressItem._id} is_primary={addressItem.is_primary} address={addressItem?.address} type={addressItem?.type} onDelete={() => {
+                onDeleteAddress(addressItem._id)
+              }} ></AdressItem>
+            })
+          ) : <EmptyScreen bgColor={"white"} content={"Add your address before exploring cart"} title={"You don't have address"}></EmptyScreen>
         }
+         
 
       </FullBox>
     </DashBoardLayout>

@@ -33,22 +33,22 @@ function UserSignup() {
 
     const fisrtLevel = Yup.object().shape({
         isOtpSend: Yup.boolean(),
-        firstName: Yup.string().required('First Name is required'),
-        lastName: Yup.string().required('Last Name is required'),
-        email: Yup.string().email('Invalid email').required('Email is required'),
-        phoneNumber: Yup.string()
+        firstName: Yup.string().trim().required('First Name is required'),
+        lastName: Yup.string().trim().required('Last Name is required'),
+        email: Yup.string().trim().email('Invalid email').required('Email is required'),
+        phoneNumber: Yup.string().trim()
             .matches(/^\d{10}$/, 'Phone number must be 10 digits')
             .required('Phone Number is required'),
-        userid: Yup.string()
+        userid: Yup.string().trim()
     });
 
     const secondLevel = Yup.object().shape({
-        password: Yup.string()
+        password: Yup.string().trim()
             .min(6, 'Password must be at least 6 characters')
             .required('Password is required'),
-        cpassword: Yup.string().required('Confirm Password is required')
+        cpassword: Yup.string().trim().required('Confirm Password is required')
             .oneOf([Yup.ref('password'), null], 'Passwords must match'),
-        otp: Yup.string().required('OTP is required')
+        otp: Yup.string().trim().required('OTP is required')
     });
 
     let [alertComponent, alertComponetUpdate] = useState({ component: null })
