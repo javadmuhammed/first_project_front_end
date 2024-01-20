@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import React, { Fragment, useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
 import { getCategoryProduct, getSingleProduct } from '../../../API/api_request';
 import Breadcrumb from '../../../Component/Util/ElementRelated/Breadcrumb';
 import UserLayout from '../../../Component/UserPartials/UserLayout/UserLayout';
@@ -23,6 +23,8 @@ function SingleProductView() {
     let { product_id } = useParams();
     let [thisProduct, setThisProduct] = useState({});
     let [categoryProduct, setCategoryProduct] = useState([]);
+    let [isLoading, setLoading] = useState(true);
+    let navigate = useNavigate();
 
 
     useEffect(() => {
@@ -32,23 +34,30 @@ function SingleProductView() {
             let data = response?.data;
             if (data?.status) {
                 let product = data?.product;
-                setThisProduct(product)
-                console.log(product)
+                if (product) {
+                    setThisProduct(product)
+                    console.log(product)
+                    setLoading(false)
 
+                    getCategoryProduct(product?.category).then((categoryProduct) => {
+                        let responseData = categoryProduct?.data;
+                        console.log(responseData)
+                        if (responseData?.status) {
+                            let categoryProduct = responseData?.products;
+                            setCategoryProduct(categoryProduct)
+                        }
+                    }).catch((err) => {
 
-                getCategoryProduct(product?.category).then((categoryProduct) => {
-                    let responseData = categoryProduct?.data;
-                    console.log(responseData)
-                    if (responseData?.status) {
-                        let categoryProduct = responseData?.products;
-                        setCategoryProduct(categoryProduct)
-                    }
-                }).catch((err) => {
-
-                })
-
+                    })
+                } else {
+                    navigate("/404")
+                }
+            }else{
+                navigate("/404")
             }
-        }).catch((e) => { })
+        }).catch((e) => { 
+            navigate("/404")
+        })
     }, [])
 
 
@@ -56,51 +65,54 @@ function SingleProductView() {
     return (
 
         <UserLayout>
-            <LoadingSpinner></LoadingSpinner>
+            {
+                isLoading ? <LoadingSpinner isShow={true}></LoadingSpinner> : (
 
-            <CartUserOverCanvas />
-            <CategoryModalUser></CategoryModalUser>
-            <Breadcrumb pageName={`Product View / ${thisProduct?.name}`}></Breadcrumb>
 
-            <div class="all-product-grid">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="product-dt-view">
+                    <Fragment>
+                        <CartUserOverCanvas />
+                        <CategoryModalUser></CategoryModalUser>
+                        <Breadcrumb pageName={`Product View / ${thisProduct?.name}`}></Breadcrumb>
+
+                        <div class="all-product-grid">
+                            <div class="container">
                                 <div class="row">
-                                    <div class="col-lg-4 col-md-4">
-                                        <SliderComponent settings={{
-                                            className: "singleProductSliderMain",
-                                            speed: 2000,
-                                            slidesToShow: 1,
-                                            slidesToScroll: 1,
-                                            infinite: false
-                                        }}>
-                                            <div className="item">
-                                                <SingleProductImage src={"http://localhost:7000/images/web_images/web_images_lemon.webp"} />
-                                            </div>
-                                            <div className="item">
-                                                <SingleProductImage src={"http://localhost:7000/images/web_images/web_images_lemon.webp"} />
-                                            </div>
-                                            <div className="item">
-                                                <SingleProductImage src={"http://localhost:7000/images/web_images/web_images_lemon.webp"} />
-                                            </div>
-                                        </SliderComponent>
-                                    </div>
-                                    <div class="col-lg-8 col-md-8">
-                                        <div class="product-dt-right">
-                                            <h2>{thisProduct?.name}</h2>
-                                            <div class="no-stock">
-                                                <p class="pd-no">Product ID.<span>{thisProduct?._id}</span></p>
-                                                <p class="stock-qty">Available<span>{
-                                                    !isStockAvailable(thisProduct?.stock) ? "Out of stock" : typeof (isStockAvailable(thisProduct?.stock)) != 'boolean' ? isStockAvailable(thisProduct?.stock) : "Product in Stock"
-                                                }</span></p>
-                                                <p class="stock-qty">Category<span>{
-                                                    thisProduct?.category?.name ?? ""
-                                                }</span></p>
-                                            </div>
-                                            <ProductVariation></ProductVariation>
-                                            {/* <div class="product-radio">
+                                    <div class="col-lg-12">
+                                        <div class="product-dt-view">
+                                            <div class="row">
+                                                <div class="col-lg-4 col-md-4">
+                                                    <SliderComponent settings={{
+                                                        className: "singleProductSliderMain",
+                                                        speed: 2000,
+                                                        slidesToShow: 1,
+                                                        slidesToScroll: 1,
+                                                        infinite: false
+                                                    }}>
+                                                        <div className="item">
+                                                            <SingleProductImage src={"http://localhost:7000/images/web_images/web_images_lemon.webp"} />
+                                                        </div>
+                                                        <div className="item">
+                                                            <SingleProductImage src={"http://localhost:7000/images/web_images/web_images_lemon.webp"} />
+                                                        </div>
+                                                        <div className="item">
+                                                            <SingleProductImage src={"http://localhost:7000/images/web_images/web_images_lemon.webp"} />
+                                                        </div>
+                                                    </SliderComponent>
+                                                </div>
+                                                <div class="col-lg-8 col-md-8">
+                                                    <div class="product-dt-right">
+                                                        <h2>{thisProduct?.name}</h2>
+                                                        <div class="no-stock">
+                                                            <p class="pd-no">Product ID.<span>{thisProduct?._id}</span></p>
+                                                            <p class="stock-qty">Available<span>{
+                                                                !isStockAvailable(thisProduct?.stock) ? "Out of stock" : typeof (isStockAvailable(thisProduct?.stock)) != 'boolean' ? isStockAvailable(thisProduct?.stock) : "Product in Stock"
+                                                            }</span></p>
+                                                            <p class="stock-qty">Category<span>{
+                                                                thisProduct?.category?.name ?? ""
+                                                            }</span></p>
+                                                        </div>
+                                                        <ProductVariation></ProductVariation>
+                                                        {/* <div class="product-radio">
                                                 <ul class="product-now">
                                                     <li>
                                                         <input type="radio" id="p1" name="product1" />
@@ -120,128 +132,131 @@ function SingleProductView() {
                                                     </li>
                                                 </ul>
                                             </div> */}
-                                            {/* <p class="pp-descp">
+                                                        {/* <p class="pp-descp">
                                                 {
                                                     thisProduct?.description
                                                 }
                                             </p> */}
-                                            <div class="product-group-dt">
-                                                <ul>
-                                                    <li><div class="main-price color-discount">Discount Price<span>{
-                                                        const_data.CURRENCY_ICON + thisProduct.sale_price
-                                                    }</span></div></li>
-                                                    <li><div class="main-price mrp-price">MRP Price<span>{const_data.CURRENCY_ICON + thisProduct.original_price}</span></div></li>
-                                                </ul>
-                                                <ListBox property={[{
-                                                    icon: "pricetag-alt",
-                                                    title: `Avail the special category offer of ${thisProduct?.category?.offer}%`
-                                                },
-                                                {
-                                                    icon: "pricetag-alt",
-                                                    title: `Avail the product  offer of ${thisProduct?.original_price - thisProduct?.sale_price + const_data.CURRENCY_ICON}`
-                                                },
-                                                {
-                                                    icon: "pricetag-alt",
-                                                    title: `Cashback and coupen code for selected users`
-                                                }]}>
+                                                        <div class="product-group-dt">
+                                                            <ul>
+                                                                <li><div class="main-price color-discount">Discount Price<span>{
+                                                                    const_data.CURRENCY_ICON + thisProduct.sale_price
+                                                                }</span></div></li>
+                                                                <li><div class="main-price mrp-price">MRP Price<span>{const_data.CURRENCY_ICON + thisProduct.original_price}</span></div></li>
+                                                            </ul>
+                                                            <ListBox property={[{
+                                                                icon: "pricetag-alt",
+                                                                title: `Avail the special category offer of ${thisProduct?.category?.offer}%`
+                                                            },
+                                                            {
+                                                                icon: "pricetag-alt",
+                                                                title: `Avail the product  offer of ${thisProduct?.original_price - thisProduct?.sale_price + const_data.CURRENCY_ICON}`
+                                                            },
+                                                            {
+                                                                icon: "pricetag-alt",
+                                                                title: `Cashback and coupen code for selected users`
+                                                            }]}>
 
-                                                </ListBox>
-                                                <ul class="gty-wish-share">
-                                                    <li>
-                                                        <ProductQuanityManager currentValue={1} product_id={thisProduct._id}></ProductQuanityManager>
-                                                    </li>
-                                                    <li>
-                                                        <OrderNowButton></OrderNowButton>
-                                                    </li>
-                                                    <li>
-                                                        <WishListButton product_id={thisProduct?._id}></WishListButton>
-                                                    </li>
-                                                </ul>
+                                                            </ListBox>
+                                                            <ul class="gty-wish-share">
+                                                                <li>
+                                                                    <ProductQuanityManager currentValue={1} product_id={thisProduct._id}></ProductQuanityManager>
+                                                                </li>
+                                                                <li>
+                                                                    <OrderNowButton></OrderNowButton>
+                                                                </li>
+                                                                <li>
+                                                                    <WishListButton product_id={thisProduct?._id}></WishListButton>
+                                                                </li>
+                                                            </ul>
 
+                                                        </div>
+                                                        <div class="pdp-details">
+                                                            <ul>
+                                                                <li>
+                                                                    <CardBox icon={<i class="uil uil-usd-circle"></i>} title={"Lowest Price Guaranteed"} paragraph={"Get difference refunded if you find it cheaper anywhere else"} ></CardBox>
+                                                                </li>
+                                                                <li>
+                                                                    <CardBox icon={<i class="uil uil-cloud-redo"></i>} title={"Easy Returns & Refunds"} paragraph={"Return products at doorstep and get refund in seconds."} ></CardBox>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="pdp-details">
-                                                <ul>
-                                                    <li>
-                                                        <CardBox icon={<i class="uil uil-usd-circle"></i>} title={"Lowest Price Guaranteed"} paragraph={"Get difference refunded if you find it cheaper anywhere else"} ></CardBox>
-                                                    </li>
-                                                    <li>
-                                                        <CardBox icon={<i class="uil uil-cloud-redo"></i>} title={"Easy Returns & Refunds"} paragraph={"Return products at doorstep and get refund in seconds."} ></CardBox>
-                                                    </li>
-                                                </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-12">
+                                        <div class="pdpt-bg">
+                                            <div class="pdpt-title">
+                                                <h4>More Like This</h4>
+                                            </div>
+                                            <div class="pdpt-body scrollstyle_4">
+                                                {
+                                                    categoryProduct?.map((eachItem) => {
+                                                        let offer = findDiscountPercentage(eachItem?.original_price, eachItem?.sale_price)
+                                                        return (
+                                                            <SideProduct product_id={eachItem._id} offer={offer} onAddtoCart={() => {
+
+                                                            }} onDelete={() => { }} originalPrice={eachItem?.original_price} productImage={const_data.public_image_url + "/" + eachItem?.images[0]} sale_price={eachItem?.sale_price} title={eachItem?.name} ></SideProduct>
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-8 col-md-12">
+                                        <div class="pdpt-bg">
+                                            <div class="pdpt-title">
+                                                <h4>Product Details</h4>
+                                            </div>
+                                            <div class="pdpt-body scrollstyle_4">
+                                                <div class="pdct-dts-1">
+                                                    <div class="pdct-dt-step">
+                                                        <h4>Description</h4>
+                                                        <p>{thisProduct.description}</p>
+                                                    </div>
+                                                    <div class="pdct-dt-step">
+                                                        <h4>Key Features</h4>
+                                                        <div class="product_attr">
+                                                            <ul>
+                                                                {
+                                                                    thisProduct?.key_features?.map((eachItem) => {
+                                                                        return (
+                                                                            <li>{eachItem}</li>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="pdct-dt-step">
+                                                        <h4>Specification</h4>
+                                                        <div class="product_attr">
+                                                            <ul>
+                                                                {
+                                                                    thisProduct?.specifications?.map((eachItem) => {
+                                                                        return (
+                                                                            <li>{eachItem}</li>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </ul>                                            </div>
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-4 col-md-12">
-                            <div class="pdpt-bg">
-                                <div class="pdpt-title">
-                                    <h4>More Like This</h4>
-                                </div>
-                                <div class="pdpt-body scrollstyle_4">
-                                    {
-                                        categoryProduct?.map((eachItem) => {
-                                            let offer = findDiscountPercentage(eachItem?.original_price, eachItem?.sale_price)
-                                            return (
-                                                <SideProduct product_id={eachItem._id} offer={offer} onAddtoCart={() => {
-
-                                                }} onDelete={() => { }} originalPrice={eachItem?.original_price} productImage={const_data.public_image_url + "/" + eachItem?.images[0]} sale_price={eachItem?.sale_price} title={eachItem?.name} ></SideProduct>
-                                            )
-                                        })
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-8 col-md-12">
-                            <div class="pdpt-bg">
-                                <div class="pdpt-title">
-                                    <h4>Product Details</h4>
-                                </div>
-                                <div class="pdpt-body scrollstyle_4">
-                                    <div class="pdct-dts-1">
-                                        <div class="pdct-dt-step">
-                                            <h4>Description</h4>
-                                            <p>{thisProduct.description}</p>
-                                        </div>
-                                        <div class="pdct-dt-step">
-                                            <h4>Key Features</h4>
-                                            <div class="product_attr">
-                                                <ul>
-                                                    {
-                                                        thisProduct?.key_features?.map((eachItem) => {
-                                                            return (
-                                                                <li>{eachItem}</li>
-                                                            )
-                                                        })
-                                                    }
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="pdct-dt-step">
-                                            <h4>Specification</h4>
-                                            <div class="product_attr">
-                                                <ul>
-                                                    {
-                                                        thisProduct?.specifications?.map((eachItem) => {
-                                                            return (
-                                                                <li>{eachItem}</li>
-                                                            )
-                                                        })
-                                                    }
-                                                </ul>                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </UserLayout >
+                    </Fragment>
+                )
+            }
+        </UserLayout>
     )
 }
 
