@@ -2,7 +2,7 @@
 export const const_data = {
     CURRENCY_ICON: "₹",
     CURRENCY_TYPE: "INR",
-    // API_URL: "https://api.veguess.shop",
+    API_URL: "https://api.veguess.shop",
     // API_URL: "http://localhost:7000",
     FRONT_END_DOMAIN: "https://veguess.shop",
     ADMIN_PATH: "/admin",
