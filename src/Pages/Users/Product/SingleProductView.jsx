@@ -89,13 +89,13 @@ function SingleProductView() {
                                                         infinite: false
                                                     }}>
                                                         <div className="item">
-                                                            <SingleProductImage src={"http://localhost:7000/images/web_images/web_images_lemon.webp"} />
+                                                            <SingleProductImage src={ const_data.public_image_url+"/web_images_lemon.webp"} />
                                                         </div>
                                                         <div className="item">
-                                                            <SingleProductImage src={"http://localhost:7000/images/web_images/web_images_lemon.webp"} />
+                                                            <SingleProductImage src={const_data.public_image_url+"/web_images_lemon.webp"} />
                                                         </div>
                                                         <div className="item">
-                                                            <SingleProductImage src={"http://localhost:7000/images/web_images/web_images_lemon.webp"} />
+                                                            <SingleProductImage src={const_data.public_image_url+"/web_images_lemon.webp"} />
                                                         </div>
                                                     </SliderComponent>
                                                 </div>
