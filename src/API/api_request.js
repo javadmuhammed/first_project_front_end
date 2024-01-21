@@ -16,8 +16,8 @@ export async function userLoginRequest(user) {
     return await instance.post(const_data.API_ENDPOINT.loggin_user, user)
 }
 
-export async function wishlistToCart(variation,product_id) {
-    return await instance.post(const_data.API_ENDPOINT.loggin_user, { 
+export async function wishlistToCart(variation, product_id) {
+    return await instance.post(const_data.API_ENDPOINT.loggin_user, {
         variation: variation,
         product_id
     })
@@ -193,8 +193,16 @@ export async function getAllProduct() {
 
 
 
+
 export async function createInvoice(phone, selectedAddress) {
     return await instance.post(const_data.API_ENDPOINT.create_invoice, { phone, selected_address: selectedAddress });
+}
+
+export async function buySingleProductAPI(phone, address, product_id, variation, quantity) {
+    return await instance.post(const_data.API_ENDPOINT.buy_single_product,
+        {
+            phone, selected_address: address, product_id, variation, quantity
+        })
 }
 
 export async function invoicePhoneVerification(otpField, phone, invoiceId) {

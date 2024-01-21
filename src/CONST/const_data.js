@@ -2,8 +2,8 @@
 export const const_data = {
     CURRENCY_ICON: "₹",
     CURRENCY_TYPE: "INR",
-    API_URL: "https://api.veguess.shop",
-    // API_URL: "http://localhost:7000",
+    // API_URL: "https://api.veguess.shop",
+    API_URL: "http://localhost:7000",
     FRONT_END_DOMAIN: "https://veguess.shop",
     ADMIN_PATH: "/admin",
     user_profile_path: "https://api.veguess.shop/images/userProfile",
@@ -49,6 +49,7 @@ export const const_data = {
         create_invoice: "/create_invoice",
         invoice_phone_verification: "/invoice_phone_verification",
         invoice_update: "/invoice_update",
+        buy_single_product: "/buy_single_product",
         get_single_invoice: "/get_single_invoice",
         apply_coupen: "/apply_coupen",
         resend_checkout_otp: "/resend_checkout_otp",

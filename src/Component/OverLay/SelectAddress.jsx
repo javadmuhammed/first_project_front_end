@@ -1,24 +1,36 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { getUserAddress } from '../../API/api_request';
+import Button1 from '../Util/Buttons/Button1';
 
-function SelectAddressOverlay({ state,allAddress }) {
+function SelectAddressOverlay({ state, allAddress, confirmButton = false }) {
 
 
-    let [selectedAddress, setSelectedAddress] = useState();
-    
+    let [selectedAddress, setSelectedAddress] = useState(null);
+
     let modalCloseBtn = useRef(null);
 
 
     function addressSelectChange(e) {
         let address_id = e.target.value;
-        setSelectedAddress(address_id);
-        state(address_id)
-        modalCloseBtn.current.click(); 
+        if (confirmButton) {
+            setSelectedAddress(address_id);
+        } else {
+            state(address_id)
+            modalCloseBtn.current.click();
+        }
+    }
+
+    function addressSubmit() {
+        
+        if (selectedAddress!="" && selectedAddress!=null) {
+            state(selectedAddress)
+            modalCloseBtn.current.click();
+        }
     }
 
 
-     
+
 
     return (
         <div id="select_address_model" class="header-cate-model main-gambo-model modal fade" tabindex="-1" role="dialog" aria-modal="false">
@@ -37,15 +49,16 @@ function SelectAddressOverlay({ state,allAddress }) {
                             <div class="checout-address-step">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                    <button class="add-address hover-btn mb-2 mt-0 ml-0" data-toggle="modal" data-target="#address_model">Add New Address</button>
+                                        <button class="add-address hover-btn mb-2 mt-0 ml-0" data-toggle="modal" data-target="#address_model">Add New Address</button>
+
 
                                         <ul class="d-block radio--group-inline-container_1" style={{
                                             maxHeight: "300px",
                                             overflowY: "auto", overflowX: "hidden"
-                                        }}> 
+                                        }}>
                                             {
-                                                
-                                                allAddress.map((addressItem, index) => { 
+
+                                                allAddress.map((addressItem, index) => {
                                                     return (
                                                         <li class="w-100">
                                                             <div class="radio-item_1">
@@ -69,7 +82,16 @@ function SelectAddressOverlay({ state,allAddress }) {
                                 </div>
                             </div>
                         </div>
+                        {
+                            confirmButton ? (
+                                <div class="cate-header">
+                                    <Button1 isFullWidth={true} type="button" onClick={addressSubmit} title="Select Address" ></Button1>
+                                </div>
+                            ) : null
+                        }
+
                     </div>
+
                 </div>
             </div>
         </div >

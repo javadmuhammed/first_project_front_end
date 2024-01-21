@@ -108,10 +108,11 @@ function Cart() {
                     let dataResult = data?.data;
                     console.log(dataResult)
 
-                    let invoiceNumber = dataResult?.invoice_number;
+                    
 
 
                     if (dataResult?.status) {
+                        let invoiceNumber = dataResult?.invoice_number;
                         if (invoiceNumber) {
                             dispatch(checkoutAction.setInitData({ phoneNumber: phoneNumber, invoice_id: invoiceNumber }))
                             navigate("/checkout");

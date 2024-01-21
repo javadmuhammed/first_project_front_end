@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
-import { getCategoryProduct, getSingleProduct } from '../../../API/api_request';
+import { buySingleProductAPI, getCategoryProduct, getSingleProduct, getUserAddress } from '../../../API/api_request';
 import Breadcrumb from '../../../Component/Util/ElementRelated/Breadcrumb';
 import UserLayout from '../../../Component/UserPartials/UserLayout/UserLayout';
 import SliderComponent from '../../../Component/Slider/SliderComponent';
@@ -17,6 +17,10 @@ import ListBox from '../../../Component/Util/ElementRelated/ListBox';
 import LoadingSpinner from '../../../Component/Util/ElementRelated/LoadingSpinner';
 import CartUserOverCanvas from '../../../Component/OverLay/CartUserOverCanvas';
 import CategoryModalUser from '../../../Component/OverLay/CategoryModalUser';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { checkoutAction } from '../../../redux/slice/CartCheckout';
+import SelectAddressOverlay from '../../../Component/OverLay/SelectAddress';
 
 function SingleProductView() {
 
@@ -25,9 +29,79 @@ function SingleProductView() {
     let [categoryProduct, setCategoryProduct] = useState([]);
     let [isLoading, setLoading] = useState(true);
     let navigate = useNavigate();
+    let [allAddress, setAllAddress] = useState([])
+    let [selectedAddress, setSelectedAddress] = useState(null)
+    let isLogged = useSelector((state) => state.userAuth.isLogged)
+    let [selectedVariation, setSelectedVariation] = useState(const_data.PRODUCT_VARIATION['1kg'])
+
+
+    function buySingleProduct() {
+
+        try {
+            let localData = JSON.parse(localStorage.getItem("profile"))?.user;
+            let phoneNumber = localData?.mobile;
+
+           
+            if (selectedAddress == "" || selectedAddress == null) {
+                toast.error("Please select valid address");
+            } else {
+              
+
+                buySingleProductAPI(phoneNumber, selectedAddress, product_id, selectedVariation, 1).then((data) => {
+                    let response = data?.data;
+                    if (response?.status) {
+                        alert("s")
+                        let invoiceNumber = response?.invoice_number;
+                        if (invoiceNumber) {
+                            dispatch(checkoutAction.setInitData({ phoneNumber: phoneNumber, invoice_id: invoiceNumber }))
+                            navigate("/checkout");
+                        } else {
+                            toast.error(dataResult.msg ?? "Something went wrong", const_data.DEFAULT_ALERT_DATA);
+                        }
+                    } else {
+                        toast.error(dataResult.msg, const_data.DEFAULT_ALERT_DATA);
+                    }
+                }).catch((err) => { })
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+
+
+    async function fetchAddress() {
+
+        try {
+            let addressResponse = await getUserAddress()
+            const responseData = addressResponse?.data;
+
+            if (responseData && responseData?.status) {
+                const addressList = responseData.address;
+                setAllAddress(addressList)
+            }
+        } catch (e) {
+            alert(e)
+        }
+    }
+
+    useEffect(() => {
+ 
+        if (selectedAddress != "" && selectedAddress != null) {
+            alert("Proceed")
+            buySingleProduct()
+        }
+    }, [selectedAddress])
+
+    useEffect(() => {
+        if (isLogged) {
+            fetchAddress();
+        }
+    }, [isLogged])
 
 
     useEffect(() => {
+
 
         getSingleProduct(product_id).then((response) => {
             console.log(response)
@@ -45,19 +119,23 @@ function SingleProductView() {
                         if (responseData?.status) {
                             let categoryProduct = responseData?.products;
                             setCategoryProduct(categoryProduct)
+
                         }
                     }).catch((err) => {
 
                     })
+
                 } else {
                     navigate("/404")
                 }
-            }else{
+            } else {
                 navigate("/404")
             }
-        }).catch((e) => { 
+        }).catch((e) => {
             navigate("/404")
         })
+
+
     }, [])
 
 
@@ -70,6 +148,7 @@ function SingleProductView() {
 
 
                     <Fragment>
+                        <SelectAddressOverlay confirmButton={true} allAddress={allAddress} state={setSelectedAddress}></SelectAddressOverlay>
                         <CartUserOverCanvas />
                         <CategoryModalUser></CategoryModalUser>
                         <Breadcrumb pageName={`Product View / ${thisProduct?.name}`}></Breadcrumb>
@@ -89,13 +168,13 @@ function SingleProductView() {
                                                         infinite: false
                                                     }}>
                                                         <div className="item">
-                                                            <SingleProductImage src={ const_data.public_image_url+"/web_images_lemon.webp"} />
+                                                            <SingleProductImage src={const_data.public_image_url + "/web_images_lemon.webp"} />
                                                         </div>
                                                         <div className="item">
-                                                            <SingleProductImage src={const_data.public_image_url+"/web_images_lemon.webp"} />
+                                                            <SingleProductImage src={const_data.public_image_url + "/web_images_lemon.webp"} />
                                                         </div>
                                                         <div className="item">
-                                                            <SingleProductImage src={const_data.public_image_url+"/web_images_lemon.webp"} />
+                                                            <SingleProductImage src={const_data.public_image_url + "/web_images_lemon.webp"} />
                                                         </div>
                                                     </SliderComponent>
                                                 </div>
@@ -163,7 +242,7 @@ function SingleProductView() {
                                                                     <ProductQuanityManager currentValue={1} product_id={thisProduct._id}></ProductQuanityManager>
                                                                 </li>
                                                                 <li>
-                                                                    <OrderNowButton></OrderNowButton>
+                                                                    <OrderNowButton ></OrderNowButton>
                                                                 </li>
                                                                 <li>
                                                                     <WishListButton product_id={thisProduct?._id}></WishListButton>
