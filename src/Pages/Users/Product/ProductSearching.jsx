@@ -10,6 +10,7 @@ import { useSearchParams } from 'react-router-dom';
 import LoadingSpinner from '../../../Component/Util/ElementRelated/LoadingSpinner';
 import CartUserOverCanvas from '../../../Component/OverLay/CartUserOverCanvas';
 import CategoryModalUser from '../../../Component/OverLay/CategoryModalUser';
+import EmptyScreen from '../../../Component/Util/Box/EmptyScreen';
 
 function ProductSearching() {
 
@@ -106,23 +107,26 @@ function ProductSearching() {
             <UserLayout>
                 <Breadcrumb pageName={"Product Searching"}></Breadcrumb>
                 <div className="container mt-5">
-               
+
                     <div className="row">
                         <div className="col-md-3">
-                       
+
                             <ProdctSearchingSideBar></ProdctSearchingSideBar>
                         </div>
                         <div className="col-md-9">
                             <div className="row">
                                 {
-                                    productList?.map((item) => {
-                                        return (
-                                            <div className="col-md-4">
-                                                <ProductItem _id={item?._id} original_price={item?.original_price} sale_price={item?.sale_price} product_image={const_data.public_image_url + "/" + item?.images[0]} stock={item?.stock} title={item?.name} key={item?._id} ></ProductItem>
-                                            </div>
-                                        )
-                                    })
-
+                                    productList?.length < 1 ? (
+                                        <EmptyScreen bgColor={"white"} content={"Please check the spelling or try searching for something else"} title={"Sorry, no results found!"}></EmptyScreen>
+                                    ) : (
+                                        productList?.map((item) => {
+                                            return (
+                                                <div className="col-md-4">
+                                                    <ProductItem _id={item?._id} original_price={item?.original_price} sale_price={item?.sale_price} product_image={const_data.public_image_url + "/" + item?.images[0]} stock={item?.stock} title={item?.name} key={item?._id} ></ProductItem>
+                                                </div>
+                                            )
+                                        })
+                                    ) 
                                 }
                             </div>
                         </div>

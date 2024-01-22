@@ -1,116 +1,97 @@
 
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 
 
 import SocialMediaLinks from './SocialMediaLinks.jsx';
 import CopyRight from './CopyRight.jsx';
 import FooterTab from './FooterTab.jsx';
 import PaymentMethod from './PaymentMethod.jsx';
+import { getAllCategoryEndPoint } from '../../../API/api_request.js';
+import { const_data } from '../../../CONST/const_data.js';
+import { useDispatch } from 'react-redux';
+import { productSearchAction } from '../../../redux/slice/ProductSearching.js';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 
-let categoryLink = [
-    {
-        title: "Fruits and Vegetables",
-        link: "#",
-    },
-    {
-        title: "Grocery & Staples",
-        link: "#",
-    },
-    {
-        title: "Dairy & Eggs",
-        link: "#",
-    },
-    {
-        title: "Beverages",
-        link: "#",
-    },
-    {
-        title: "Snacks",
-        link: "#",
-    },
-    {
-        title: "Home Care",
-        link: "#",
-    },
-    {
-        title: "Noodles & Sauces",
-        link: "#",
-    },
-    {
-        title: "Personal Care",
-        link: "#",
-    },
-    {
-        title: "Pet Care",
-        link: "#",
-    },
-    {
-        title: "Meat & Seafood",
-        link: "#",
-    },
-    {
-        title: "Electronics",
-        link: "#",
-    },
-]
-
-let useFulLinks = [
-    {
-        title: "About Us",
-        link: "#about",
-    },
-    {
-        title: "Featured Products",
-        link: "#products",
-    },
-    {
-        title: "Offers",
-        link: "#offers",
-    },
-    {
-        title: "Blog",
-        link: "#blog",
-    },
-    {
-        title: "FAQ",
-        link: "#faq",
-    },
-    {
-        title: "Careers",
-        link: "#careers",
-    },
-    {
-        title: "Contact Us",
-        link: "#contact",
-    },
-]
-
-let contactList = [
-    {
-        title: "Customer Support",
-        link: "mailto:customersupport@example.com",
-    },
-    {
-        title: "Sales Department",
-        link: "mailto:sales@example.com",
-    },
-    {
-        title: "Technical Support",
-        link: "mailto:techsupport@example.com",
-    },
-    {
-        title: "General Inquiries",
-        link: "mailto:info@example.com",
-    },
-    {
-        title: "Marketing Department",
-        link: "mailto:marketing@example.com",
-    },
-]
 
 function Footer() {
+
+    let [categoryLink, setCategoryLink] = useState([]);
+    let dispatch = useDispatch();
+    let navigate= useNavigate()
+
+    let useFulLinks = [
+        {
+            title: "About Us",
+            link: "#about",
+        },
+        {
+            title: "Featured Products",
+            link: "#products",
+        },
+        {
+            title: "Offers",
+            link: "#offers",
+        },
+        {
+            title: "Blog",
+            link: "#blog",
+        },
+        {
+            title: "FAQ",
+            link: "#faq",
+        },
+        {
+            title: "Careers",
+            link: "#careers",
+        },
+        {
+            title: "Contact Us",
+            link: "#contact",
+        },
+    ]
+
+    let contactList = [
+        {
+            title: "Customer Support",
+            link: "mailto:customersupport@example.com",
+        },
+        {
+            title: "Sales Department",
+            link: "mailto:sales@example.com",
+        },
+        {
+            title: "Technical Support",
+            link: "mailto:techsupport@example.com",
+        },
+        {
+            title: "General Inquiries",
+            link: "mailto:info@example.com",
+        },
+        {
+            title: "Marketing Department",
+            link: "mailto:marketing@example.com",
+        },
+    ]
+
+
+    useEffect(() => {
+        getAllCategoryEndPoint().then((data) => {
+            let response = data?.data;
+            if (response?.status) {
+                let category = response?.categorys;
+                setCategoryLink(category?.slice(0, 7))
+            }
+        }).catch((err) => { })
+    }, []);
+
+
+    function categoryNavigate(category_id) {
+        dispatch(productSearchAction.setCategory({ category: [category_id] }))
+        navigate("/product_searching")
+    }
+
     return (
         <Fragment>
             <footer className="footer">
@@ -132,8 +113,15 @@ function Footer() {
                 <div className="footer-second-row">
                     <div className="container">
                         <div className="row">
-                            <div className="col-lg-3 col-md-6 col-sm-6">
-                                <FooterTab title="Categories" link={categoryLink}  ></FooterTab>
+                            <div className="col-lg-3 col-md-6 col-sm-6 second-row-item"> 
+                            <h4>Categories</h4>
+                                <ul>
+                                    {
+                                        categoryLink.map(function (item) {
+                                            return <li><a href="javascrit:;" onClick={() => categoryNavigate(item._id)}>{item.name}</a></li>
+                                        })
+                                    }
+                                </ul>
                             </div>
                             <div className="col-lg-3 col-md-6 col-sm-6">
                                 <FooterTab title="Useful Links" link={useFulLinks}  ></FooterTab>
@@ -166,13 +154,13 @@ function Footer() {
                     </div>
                 </div>
             </footer>
-           
-        
-
-          
 
 
-            
+
+
+
+
+
 
         </Fragment >
     )
@@ -180,6 +168,6 @@ function Footer() {
 
 
 // import '../../../UserAssets/js/jquery-3.3.1.min.js'
- 
+
 
 export default Footer

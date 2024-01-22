@@ -25,7 +25,7 @@ function DashboardTitle() {
                             <UserProfile />
                             <h4>{userData?.username}</h4>
                             <p>{userData?.mobile}<a href="#"><i class="uil uil-edit"></i></a></p>
-                            <div class="earn-points"><img src="images/Dollar.svg" alt="" />Super Coin : <span>{userData?.wallet_amount}</span></div>
+                            <div class="earn-points"><img src="images/Dollar.svg" alt="" />Wallet Amount : <span>{userData?.wallet_amount}</span></div>
                         </div>
                     </div>
                 </div>

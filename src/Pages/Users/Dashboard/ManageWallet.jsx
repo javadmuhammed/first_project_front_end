@@ -14,6 +14,7 @@ import { getUserWalletHistory } from '../../../API/api_request'
 import WalletTopUpForm from '../../../Component/Other/WalletTopUpForm'
 import { getValidDateFormat } from '../../../helper/HelperFunction'
 import { getUserByJwtToken } from '../../../redux/slice/UserSlicer'
+import EmptyScreen from '../../../Component/Util/Box/EmptyScreen'
 
 
 function ManageWallet() {
@@ -82,17 +83,21 @@ function ManageWallet() {
         </div>
         <div className="col-md-6">
           <FullBox withoutFooter={true} title={<h4>Topup History</h4>}>
-            <div class="history-body scrollstyle_4">
+            <div class="history-body scrollstyle_4" style={{ height: "auto" }}>
               <ul class="history-list">
 
                 {
-                  userWalletHistory?.map((history) => {
-                    return (
-                      <li className='d-block'>
-                        <HistoryComponent title={history?.via} subHeading={<span>Payment ID  <ins>{history?.payment_id ?? "Offline Credit"}</ins></span>} footer={getValidDateFormat(history?.date)} tile={history?.amount + const_data.CURRENCY_ICON} ></HistoryComponent>
-                      </li>
-                    )
-                  })
+                  (userWalletHistory?.length < 1 || !userWalletHistory) ? (
+                    <EmptyScreen bgColor={"white"} content={"You don;t have any transactionns"} title={"Empty Transactions"}></EmptyScreen>
+                  ) : (
+                    userWalletHistory?.map((history) => {
+                      return (
+                        <li className='d-block'>
+                          <HistoryComponent title={history?.via} subHeading={<span>Payment ID  <ins>{history?.payment_id ?? "Offline Credit"}</ins></span>} footer={getValidDateFormat(history?.date)} tile={history?.amount + const_data.CURRENCY_ICON} ></HistoryComponent>
+                        </li>
+                      )
+                    })
+                  )
                 }
 
 

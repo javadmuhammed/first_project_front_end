@@ -192,6 +192,9 @@ export async function getAllProduct() {
 }
 
 
+export async function invoiceSummary(invoice_id) {
+    return await instance.get(const_data.API_ENDPOINT.get_invoice_summary + "/" + invoice_id);
+}
 
 
 export async function createInvoice(phone, selectedAddress) {

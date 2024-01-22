@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import { const_data, getAvtarImage } from '../../../CONST/const_data'
 import { useDispatch, useSelector } from 'react-redux'
@@ -12,9 +12,18 @@ function UserProfile() {
     let dispatch = useDispatch();
 
     let [profileImage, profileStateUpdate] = useState(userData?.profile_pic ?? getAvtarImage())
-     
+
+
+    useEffect(() => {
+        if (userData?.profile != null && userData?.profile != "") {
+            profileStateUpdate(const_data.user_profile_path + "/" + userData?.profile)
+        }
+    }, [userData])
+
 
     function onProfileImageChange(profile) {
+
+
         let formData = new FormData();
         formData.append("profile", profile);
 
@@ -24,14 +33,13 @@ function UserProfile() {
 
             console.log(data)
             if (data.data?.status) {
-                let dpImage = data.data?.profileImage;
-                console.log("Profile Picture Update Success")
+                let dpImage = data.data?.profileImage; 
                 let profileImageUrl = const_data.user_profile_path + "/" + dpImage;
                 profileStateUpdate(profileImageUrl)
                 let updateDate = { ...userData };
                 updateDate.profile = profileImageUrl;
                 dispatch(userAction.updateUser({ user: updateDate }))
-                authHelper.setUserToLocalStorage(updateDate)
+                // authHelper.setUserToLocalStorage(updateDate)
             }
         }).catch((err) => {
             console.log(err)

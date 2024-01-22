@@ -167,7 +167,7 @@ function PhoneVerification() {
                                         <input ref={otpHandle4} style={{ textAlign: 'center', maxWidth: "50px" }} type="text" placeholder="" class="form-control input-md" required=""></input>
                                     </div>
                                     {
-                                        resendOtpAvailable ? <a href="#" class="resend-link" onClick={resendCheckoutOTP}>Resend Code </a> : <a href="#" class="resend-link" >Please wait for {timer} seconds</a>
+                                        resendOtpAvailable ? <button   class="resend-link bg-white" onClick={resendCheckoutOTP}>Resend Code </button> : <button   class="resend-link bg-white" >Please wait for {timer} seconds</button>
                                     }
 
                                 </div>

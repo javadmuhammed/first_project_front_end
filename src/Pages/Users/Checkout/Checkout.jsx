@@ -6,7 +6,7 @@ import DeliveryTime from '../../../Component/Cart/CheckoutSteps/DeliveryTime'
 import Payment from '../../../Component/Cart/CheckoutSteps/Payment'
 import SelectAddress from '../../../Component/Cart/CheckoutSteps/SelectAddress'
 import Summary from '../../../Component/Util/Checkout/Summary'
-import { getSingleInvoice, getUserByJwt, get_single_address, invoice_update, razorpayeOrderCreate, verifyRazorpay } from '../../../API/api_request'
+import { getSingleInvoice, getUserByJwt, get_single_address, invoiceSummary as invoiceSummaryApi, invoice_update, razorpayeOrderCreate, verifyRazorpay } from '../../../API/api_request'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
@@ -20,7 +20,7 @@ import CategoryModalUser from '../../../Component/OverLay/CategoryModalUser'
 function Checkout() {
 
     // let [priceList, setPriceList] = useState({});
-    // let [selectedAddress, setSelectedAddress] = useState(null);\
+    // let [selectedAddress, setSelectedAddress] = useState(null);
     let userData = useSelector((state) => state.userAuth.user)
     let [selectedDeliveryTime, setSelectedDeliveryTime] = useState(null);
     let [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
@@ -30,9 +30,26 @@ function Checkout() {
     let [thisInvoice, setThisInvoice] = useState({})
     let [stateUpdate, setStateUpdate] = useState(true);
     let dispatch = useDispatch()
+    let [isReadyToPlace, setIsReadyToPlace] = useState(false);
+    let [invoiceSummary, setInvoiceSummary] = useState({});
+    
 
-    let cartData = useSelector((state) => state.userCart);
-    console.log(cartData)
+    // let cartData = useSelector((state) => state.userCart);
+    // console.log(cartData)
+
+    useEffect(() => {
+        invoiceSummaryApi(invoiceID).then((data) => {
+            let response = data?.data;
+            if (response?.status) {
+                setInvoiceSummary(response?.summery)
+                setIsReadyToPlace(true)
+            } else {
+                navigate("/cart")
+            }
+        }).catch((err) => {
+            navigate("/cart")
+        })
+    }, [])
 
     useEffect(() => {
         if (invoiceID == null || phoneNumber == null) {
@@ -107,52 +124,55 @@ function Checkout() {
 
     function placeOrder() {
 
-        if (selectedPaymentMethod == const_data.PAYMENT_METHOD.RAZORPAY) {
+        if (isReadyToPlace) {
 
-            razorpayeOrderCreate(invoiceID).then((order_data) => {
-                let response = order_data?.data;
-                if (response?.status) {
-                    let order = response.order;
-                    initRazorPay(order)
-                } else {
-                    console.log(response)
-                    toast.error("Something went wrong")
-                }
-            }).catch((err) => {
-                console.log(err)
-                toast.error("Something went wrong")
-            })
-        } else {
-            invoice_update(invoiceID, {
-                delivery_time: selectedDeliveryTime,
-                payment_method: selectedPaymentMethod,
-                payment_status: "POST PAID",
-                payment_date: new Date(),
-                order_placed: true,
-            }).then(async (placedOrder) => {
-                let data = placedOrder.data;
+            if (selectedPaymentMethod == const_data.PAYMENT_METHOD.RAZORPAY) {
 
-                if (data?.status) {
-                    let is_coupen = data?.coupen;
-                    if (is_coupen) {
-                        alert("You won a coupen")
+                razorpayeOrderCreate(invoiceID).then((order_data) => {
+                    let response = order_data?.data;
+                    if (response?.status) {
+                        let order = response.order;
+                        initRazorPay(order)
+                    } else {
+                        console.log(response)
+                        toast.error("Something went wrong")
                     }
-                    toast.success("Order placed success");
-                    navigate("/order_success/" + invoiceID)
-                    dispatch(await getUserByJwtToken({ jwt: userData.access_token }))
-                } else {
-                    toast.error(data.msg);
-                }
-            }).catch((err) => {
-                toast.error("Something went wrong");
-            })
+                }).catch((err) => {
+                    console.log(err)
+                    toast.error("Something went wrong")
+                })
+            } else {
+                invoice_update(invoiceID, {
+                    delivery_time: selectedDeliveryTime,
+                    payment_method: selectedPaymentMethod,
+                    payment_status: "POST PAID",
+                    payment_date: new Date(),
+                    order_placed: true,
+                }).then(async (placedOrder) => {
+                    let data = placedOrder.data;
+
+                    if (data?.status) {
+                        let is_coupen = data?.coupen;
+                        if (is_coupen) {
+                            alert("You won a coupen")
+                        }
+                        toast.success("Order placed success");
+                        navigate("/order_success/" + invoiceID)
+                        dispatch(await getUserByJwtToken({ jwt: userData.access_token }))
+                    } else {
+                        toast.error(data.msg);
+                    }
+                }).catch((err) => {
+                    toast.error("Something went wrong");
+                })
+            }
         }
     }
 
 
     return (
         <Fragment>
-            <LoadingSpinner></LoadingSpinner>
+            <LoadingSpinner isShow={!isReadyToPlace}></LoadingSpinner>
 
             <CartUserOverCanvas />
             <CategoryModalUser></CategoryModalUser>
@@ -163,34 +183,35 @@ function Checkout() {
                         <div className="col-md-8">
                             <div id="checkout_wizard" class="checkout accordion left-chck145">
                                 <div class="checkout-step">
+                                    
                                     <PhoneVerification></PhoneVerification>
                                 </div>
                                 <div class="checkout-step">
                                     <DeliveryTime stateField={setSelectedDeliveryTime}></DeliveryTime>
                                 </div>
                                 <div class="checkout-step">
-                                    <Payment sub_total={(cartData?.priceData?.subTotal - Math.floor(thisInvoice?.original_amount - thisInvoice?.total_amount))} stateField={setSelectedPaymentMethod}></Payment>
+                                    <Payment sub_total={(invoiceSummary?.subTotal - Math.floor(thisInvoice?.original_amount - thisInvoice?.total_amount))} stateField={setSelectedPaymentMethod}></Payment>
                                 </div>
                             </div>
                         </div>
                         <div className="col-md-4">
                             <Summary title={"Cart Summary"} list={[{
                                 title: "Total",
-                                value: cartData?.priceData?.total ?? 0,
+                                value: invoiceSummary?.total ?? 0,
                             },
                             {
                                 title: "Discount",
-                                value: cartData?.priceData?.discount ?? 0,
+                                value: invoiceSummary?.discount ?? 0,
                             },
                             {
                                 title: "Coupen Discount",
                                 value: Math.floor(thisInvoice?.original_amount - thisInvoice?.total_amount) ?? 0,
                             }, {
                                 title: "Sub total",
-                                value: (cartData?.priceData?.subTotal - Math.floor(thisInvoice?.original_amount - thisInvoice?.total_amount)) ?? 0,
+                                value: (invoiceSummary?.subTotal - Math.floor(thisInvoice?.original_amount - thisInvoice?.total_amount)) ?? 0,
                             }]}
 
-                                total={(cartData?.priceData?.subTotal - Math.floor(thisInvoice?.original_amount - thisInvoice?.total_amount)) ?? 0}></Summary>
+                                total={(invoiceSummary?.subTotal - Math.floor(thisInvoice?.original_amount - thisInvoice?.total_amount)) ?? 0}></Summary>
                             <div class="payment-secure bg-white">
                                 <i class="uil uil-padlock"></i>Secure checkout
                             </div>

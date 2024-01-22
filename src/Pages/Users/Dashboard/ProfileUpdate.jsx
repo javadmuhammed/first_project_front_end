@@ -52,7 +52,7 @@ function ProfileUpdate() {
 
     let basicProfileValidation = Yup.object().shape({
         first_name: Yup.string("Please enter valid string").trim().required("First name is required"),
-        last_name: Yup.string("Please enter valid last name")
+        last_name: Yup.string("Please enter valid last name").trim().required("Last name is required")
     })
 
     let otpValidation = Yup.object().shape({
@@ -99,6 +99,7 @@ function ProfileUpdate() {
                 last_name: lastName
             }
         }).then((data) => {
+            console.log(data)
             if (data?.data?.status) {
                 let user = { ...currentUser };
 

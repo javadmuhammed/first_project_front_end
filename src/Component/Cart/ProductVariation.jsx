@@ -18,7 +18,7 @@ function ProductVariation({ product_id, cart_id, selected_variation = const_data
     // }, [selectedVariation])
 
     async function updateCartVariation(variation) {
-
+ 
         let valueVariation = const_data.PRODUCT_VARIATION[variation];
 
 
@@ -28,9 +28,9 @@ function ProductVariation({ product_id, cart_id, selected_variation = const_data
 
                 let variationData = await cartVariationUpdate(cart_id, product_id, variation)
                 let response = variationData.data;
-
+ 
                 if (!response?.status) {
-                    setSelectedVariation(const_data.PRODUCT_VARIATION[valueVariation])
+                    setSelectedVariation(variation)
                 } else {
                     setSelectedVariation(valueVariation)
                     dispatch(await fetchCartDetails())
@@ -57,10 +57,11 @@ function ProductVariation({ product_id, cart_id, selected_variation = const_data
 
                         return (
                             <li>
-                                <input type="radio" checked={isChecked} id={"a1" + index + product_id} name={"cart1" + product_id} onClick={() => {
+                            
+                                <input type="radio" checked={isChecked} id={"a1_crt_" + index + product_id} name={"a1_crt_" + product_id} onClick={() => {
                                     updateCartVariation(items)
                                 }} />
-                                <label for={"a1" + index + product_id}>{items + " -  " + const_data.PRODUCT_VARIATION[items] }</label>
+                                <label for={"a1_crt_" + index + product_id}>{items + " -  " + const_data.PRODUCT_VARIATION[items] }</label>
                             </li>
                         )
                     })

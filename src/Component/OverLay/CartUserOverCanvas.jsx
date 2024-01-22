@@ -7,17 +7,12 @@ import ButtonWithoutBg from '../Util/Buttons/ButtonWithoutBg'
 import { const_data } from '../../CONST/const_data'
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCartDetails, removeFromCart } from '../../redux/slice/CartItems'
+import EmptyScreen from '../Util/Box/EmptyScreen'
 
 function CartUserOverCanvas() {
 
-    let cartData = useSelector((state) => state.userCart); 
+    let cartData = useSelector((state) => state.userCart);
     let dispatch = useDispatch();
-
-
-
-
-
-
 
 
     return (
@@ -29,34 +24,38 @@ function CartUserOverCanvas() {
                     <button type="button" className="bs-canvas-close close" aria-label="Close"><i className="uil uil-multiply"></i></button>
                 </div>
                 <div className="bs-canvas-body">
-                    <div className="side-cart-items">
+                    <div className="side-cart-items h-100">
+
                         {
-                            cartData?.cart?.map((item, index) => {
+                            (cartData?.cart?.length < 1 || !cartData?.cart?.length) ? (
+                                <EmptyScreen bgColor={"white"} content={"Explore our wide selection and find something you like"} title={"Your cart is empty!"}></EmptyScreen>
+                            ) : (
+                                cartData?.cart?.map((item, index) => {
 
-                                return (<CanvasCartItem
-                                    onDelete={async () => {
-                                        dispatch(await removeFromCart({ cart_id: item._id, product_id: item.product_id }));
-                                        // dispatch(await fetchCartDetails());
-                                    }}
+                                    return (<CanvasCartItem
+                                        onDelete={async () => {
+                                            dispatch(await removeFromCart({ cart_id: item._id, product_id: item.product_id }));
+                                            // dispatch(await fetchCartDetails());
+                                        }}
 
-                                    key={index}
-                                    variation={item.variation}
-                                    cart_id={item._id}
-                                    product={item.productDetails}
-                                    currentQuanity={item.quantity}
-                                />)
-                            })
+                                        key={index}
+                                        variation={item.variation}
+                                        cart_id={item._id}
+                                        product={item.productDetails}
+                                        currentQuanity={item.quantity}
+                                    />)
+                                }))
                         }
                     </div>
                 </div>
                 <div className="bs-canvas-footer">
                     <div className="cart-total-dil saving-total ">
                         <h4>Total Saving</h4>
-                        <span>{const_data.CURRENCY_ICON}{cartData?.priceData?.discount}</span>
+                        <span>{const_data.CURRENCY_ICON}{cartData?.priceData?.discount ?? 0}</span>
                     </div>
                     <div className="main-total-cart">
                         <h2>Sub Total</h2>
-                        <span>{const_data.CURRENCY_ICON}{cartData?.priceData?.subTotal}</span>
+                        <span>{const_data.CURRENCY_ICON}{cartData?.priceData?.subTotal ?? 0}</span>
                     </div>
                     <div className="checkout-cart">
                         <ButtonWithoutBg type="a" url="#" title="Apply Promo Code" onClick={() => { }}></ButtonWithoutBg>

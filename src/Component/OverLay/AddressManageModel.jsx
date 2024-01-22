@@ -104,8 +104,10 @@ function AddressManageModel({ state }) {
 
 
     useEffect(() => {
-        let tempAddressTypes = [...Object.values(const_data.ADDRESS_TYPE)]
+        let userAddress = userData?.extra_address_type;
+        let tempAddressTypes = [...Object.values(const_data.ADDRESS_TYPE),...userAddress]
         setAddressTypes(tempAddressTypes)
+         
     }, [])
 
     return (
@@ -153,7 +155,8 @@ function AddressManageModel({ state }) {
                                                                         return (<li>
                                                                             <input
                                                                                 type="radio"
-                                                                                onClick={() => { addressTypeStateUpdate(each) }}
+                                                                                onClick={() => { ;
+                                                                                 addressTypeStateUpdate(each) }}
                                                                                 id={"ad1" + each}
                                                                                 name="address1"
                                                                                 {...(each === addressTypeState ? { checked: true } : {})}

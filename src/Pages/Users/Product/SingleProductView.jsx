@@ -18,14 +18,16 @@ import LoadingSpinner from '../../../Component/Util/ElementRelated/LoadingSpinne
 import CartUserOverCanvas from '../../../Component/OverLay/CartUserOverCanvas';
 import CategoryModalUser from '../../../Component/OverLay/CategoryModalUser';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { checkoutAction } from '../../../redux/slice/CartCheckout';
 import SelectAddressOverlay from '../../../Component/OverLay/SelectAddress';
+import VariationManager from '../../../Component/Product/VariationManager';
 
 function SingleProductView() {
 
     let { product_id } = useParams();
     let [thisProduct, setThisProduct] = useState({});
+    let [tempProduct, setTempProduct] = useState({});
     let [categoryProduct, setCategoryProduct] = useState([]);
     let [isLoading, setLoading] = useState(true);
     let navigate = useNavigate();
@@ -33,7 +35,36 @@ function SingleProductView() {
     let [selectedAddress, setSelectedAddress] = useState(null)
     let isLogged = useSelector((state) => state.userAuth.isLogged)
     let [selectedVariation, setSelectedVariation] = useState(const_data.PRODUCT_VARIATION['1kg'])
+    let dispatch = useDispatch();
 
+
+    useEffect(() => {
+
+        if (thisProduct['_id'] != null && thisProduct['_id'] != "") {
+
+            if (selectedVariation == const_data.PRODUCT_VARIATION['500gm']) {
+                let product = JSON.parse(JSON.stringify(tempProduct))
+                product.sale_price = product.sale_price / 2;
+                product.original_price = product.original_price / 2;
+                setThisProduct(product)
+            } else if (selectedVariation == const_data.PRODUCT_VARIATION['250gm']) {
+                let product = JSON.parse(JSON.stringify(tempProduct))
+                product.sale_price = product.sale_price / 4;
+                product.original_price = product.original_price / 4;
+                setThisProduct(product)
+            } else if (selectedVariation == const_data.PRODUCT_VARIATION['2kg']) {
+                let product = JSON.parse(JSON.stringify(tempProduct))
+                product.sale_price = product.sale_price * 2;
+                product.original_price = product.original_price * 2;
+                setThisProduct(product)
+            } else {
+                let product = JSON.parse(JSON.stringify(tempProduct))
+                product.sale_price = product.sale_price;
+                product.original_price = product.original_price
+                setThisProduct(product)
+            }
+        }
+    }, [selectedVariation])
 
     function buySingleProduct() {
 
@@ -41,18 +72,18 @@ function SingleProductView() {
             let localData = JSON.parse(localStorage.getItem("profile"))?.user;
             let phoneNumber = localData?.mobile;
 
-           
+
             if (selectedAddress == "" || selectedAddress == null) {
                 toast.error("Please select valid address");
             } else {
-              
+
 
                 buySingleProductAPI(phoneNumber, selectedAddress, product_id, selectedVariation, 1).then((data) => {
                     let response = data?.data;
                     if (response?.status) {
-                        alert("s")
+
                         let invoiceNumber = response?.invoice_number;
-                        if (invoiceNumber) {
+                        if (invoiceNumber != null) {
                             dispatch(checkoutAction.setInitData({ phoneNumber: phoneNumber, invoice_id: invoiceNumber }))
                             navigate("/checkout");
                         } else {
@@ -67,6 +98,8 @@ function SingleProductView() {
             console.log(e)
         }
     }
+
+
 
 
 
@@ -86,9 +119,8 @@ function SingleProductView() {
     }
 
     useEffect(() => {
- 
+
         if (selectedAddress != "" && selectedAddress != null) {
-            alert("Proceed")
             buySingleProduct()
         }
     }, [selectedAddress])
@@ -110,6 +142,7 @@ function SingleProductView() {
                 let product = data?.product;
                 if (product) {
                     setThisProduct(product)
+                    setTempProduct(product)
                     console.log(product)
                     setLoading(false)
 
@@ -182,7 +215,6 @@ function SingleProductView() {
                                                     <div class="product-dt-right">
                                                         <h2>{thisProduct?.name}</h2>
                                                         <div class="no-stock">
-                                                            <p class="pd-no">Product ID.<span>{thisProduct?._id}</span></p>
                                                             <p class="stock-qty">Available<span>{
                                                                 !isStockAvailable(thisProduct?.stock) ? "Out of stock" : typeof (isStockAvailable(thisProduct?.stock)) != 'boolean' ? isStockAvailable(thisProduct?.stock) : "Product in Stock"
                                                             }</span></p>
@@ -190,32 +222,8 @@ function SingleProductView() {
                                                                 thisProduct?.category?.name ?? ""
                                                             }</span></p>
                                                         </div>
-                                                        <ProductVariation></ProductVariation>
-                                                        {/* <div class="product-radio">
-                                                <ul class="product-now">
-                                                    <li>
-                                                        <input type="radio" id="p1" name="product1" />
-                                                        <label for="p1">500g</label>
-                                                    </li>
-                                                    <li>
-                                                        <input type="radio" id="p2" name="product1" />
-                                                        <label for="p2">1kg</label>
-                                                    </li>
-                                                    <li>
-                                                        <input type="radio" id="p3" name="product1" />
-                                                        <label for="p3">2kg</label>
-                                                    </li>
-                                                    <li>
-                                                        <input type="radio" id="p4" name="product1" />
-                                                        <label for="p4">3kg</label>
-                                                    </li>
-                                                </ul>
-                                            </div> */}
-                                                        {/* <p class="pp-descp">
-                                                {
-                                                    thisProduct?.description
-                                                }
-                                            </p> */}
+                                                        <VariationManager product_id={thisProduct?._id} setSelectedVariation={setSelectedVariation} selected_variation={selectedVariation}></VariationManager>
+
                                                         <div class="product-group-dt">
                                                             <ul>
                                                                 <li><div class="main-price color-discount">Discount Price<span>{
@@ -238,12 +246,23 @@ function SingleProductView() {
 
                                                             </ListBox>
                                                             <ul class="gty-wish-share">
-                                                                <li>
-                                                                    <ProductQuanityManager currentValue={1} product_id={thisProduct._id}></ProductQuanityManager>
-                                                                </li>
-                                                                <li>
-                                                                    <OrderNowButton ></OrderNowButton>
-                                                                </li>
+                                                                {
+                                                                    !isStockAvailable(thisProduct?.stock) ? (
+                                                                        <li>
+                                                                            <div className='text-center w-100'> <p>Not available<span>(Out of stock)</span></p> </div>
+                                                                        </li>
+                                                                    ) : (
+                                                                        <>
+                                                                            <li>
+                                                                                <ProductQuanityManager currentValue={1} product_id={thisProduct._id}></ProductQuanityManager>
+                                                                            </li>
+                                                                            <li>
+                                                                                <OrderNowButton ></OrderNowButton>
+                                                                            </li>
+                                                                        </>
+                                                                    )
+                                                                }
+
                                                                 <li>
                                                                     <WishListButton product_id={thisProduct?._id}></WishListButton>
                                                                 </li>
