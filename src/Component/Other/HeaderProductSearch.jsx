@@ -9,13 +9,12 @@ function HeaderProductSearch() {
     let navigate = useNavigate()
 
     let productSearch = function (values) {
-        let search = values.search
-        // let searchHolder = searchRef.current.value;
+        let search = values.search 
         navigate("/product_searching?pname=" + search)
     }
 
     let searchValidation = Yup.object().shape({
-        search: Yup.string("Please enter valid name").required("Please enter valid name")
+        search: Yup.string("Please enter valid name").trim().required("Please enter valid name")
     })
 
 

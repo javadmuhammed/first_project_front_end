@@ -40,15 +40,7 @@ function SetUserAuth({ children }) {
         jwt: userData?.jwt,
         reference: userData?.reference
     }
-
-
-
-
-
-
-
-
-
+ 
     instance.interceptors.response.use(
         (response) => response,
         async (error) => {
@@ -97,14 +89,14 @@ function SetUserAuth({ children }) {
 
 
         let userData;
-        let profileData;
+        // let profileData;
 
         try {
             userData = JSON.parse(localStorage.getItem("auth"));
-            profileData = JSON.parse(localStorage.getItem("profile"))
+            // let profileData = JSON.parse(localStorage.getItem("profile"))
         } catch (e) {
             userData = {}
-            profileData = {}
+            // profileData = {}
         }
 
 
@@ -112,26 +104,9 @@ function SetUserAuth({ children }) {
         authData.reference = userData?.reference;
 
 
-        if (userData?.jwt) {
-
-            // console.log("Profile data :",profileData)
-
-            let userLocalData = {
-                username: profileData?.user?.username,
-                email: profileData?.user?.email,
-                mobile: profileData?.user?.mobile,
-                firstName: profileData?.user?.firstName,
-                lastName: profileData?.user?.lastName,
-                profile_pic: profileData?.user?.profile,
-                wallet_amount: profileData?.user?.wallet_amount,
-                total_wallet_credit: profileData?.user?.total_wallet_credit,
-                last_wallet_update: profileData?.user?.last_wallet_update,
-            }
-
-            // alert("This work")
+        if (userData?.jwt) { 
             authHelper.setHeaderRequest(authData.jwt, authData.reference)
-            dispatch(await getUserByJwtToken({ jwt: authData.jwt }))
-            // dispatch(await fetchUserWishlist())
+            dispatch(await getUserByJwtToken({ jwt: authData.jwt })) 
         } else {
             console.log("Do not have valid JWT Auth")
             dispatch(userAction.userLogout())
@@ -139,7 +114,7 @@ function SetUserAuth({ children }) {
     }
 
     if (!isLogged) {
-        authHelper.setHeaderRequest(authData.jwt, authData.reference);
+        // authHelper.setHeaderRequest(authData.jwt, authData.reference);
         setUser()
     }
 

@@ -25,7 +25,7 @@ function CanvasCartItem(props) {
 
             <div className="cart-text">
                 <h4 className='mb-2'>{props.product?.name} </h4>
-                <ProductVariation selected_variation={props.variation} cart_id={props.cart_id} product_id={props.product?._id}></ProductVariation>
+                <ProductVariation code="canvasCartItem" selected_variation={props.variation} cart_id={props.cart_id} product_id={props.product?._id}></ProductVariation>
                 <div className="qty-group">
                     {
                         product.stock <= 0 ? (<div><p>Not available (Out of stock) </p></div>) : product.stock <= 10 ? (

@@ -27,7 +27,7 @@ function ManageWallet() {
 
   useEffect(() => {
     getUserWalletHistory().then((data) => {
-      let response = data?.data;
+      let response = data?.data; 
       if (response?.status) {
         let history = response?.history?.wallet_details;
         walletHistoryUpdate(history)

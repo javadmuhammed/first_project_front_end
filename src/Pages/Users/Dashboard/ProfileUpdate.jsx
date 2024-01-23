@@ -42,7 +42,7 @@ function ProfileUpdate() {
     let [cpasswordState, cpasswordStateUpdater] = useState()
     let [currentPassword, currentPasswordUpdater] = useState()
 
-     
+
 
     let phoneNumberValidator = Yup.object().shape({
         phone_number: Yup.string("Please enter valid number").trim()
@@ -134,7 +134,7 @@ function ProfileUpdate() {
                     setIsOtpSendPhoneNumber(true)
                     toast.success(`OTP has sent to ${phoneNumber}`)
                 } else {
-                    toast.error(`Something went wrong`);
+                    toast.error(response?.msg);
                 }
             }).catch((err) => {
                 toast.error(`Something went wrong`);
@@ -159,27 +159,22 @@ function ProfileUpdate() {
         }
     }
 
-    function passwordSubmitHandle() {
-
-        passwordValidation.validate({ password: passwordState, cpassword: cpasswordState, current_password: currentPassword }).then(() => {
-            userPasswordUpdater(passwordState, currentPassword).then((data) => {
-                let response = data?.data;
-                if (response?.status) {
-                    if (data.data?.status) {
-                        toast.success("Password update success")
-                    } else {
-                        toast.error(response?.msg)
-                    }
+    function passwordSubmitHandle(values) { 
+        userPasswordUpdater(values.password, values.current_password).then((data) => {
+            let response = data?.data;
+            if (response?.status) {
+                if (data.data?.status) {
+                    toast.success("Password update success")
                 } else {
                     toast.error(response?.msg)
                 }
-
-            }).catch((err) => {
-                toast.error("Password update failed 2")
-            })
+            } else {
+                toast.error(response?.msg)
+            } 
         }).catch((err) => {
-            toast.error("Password update failed 3")
+            toast.error("Password update failed 2")
         })
+
     }
 
     function resendOtpCode() {
@@ -198,6 +193,13 @@ function ProfileUpdate() {
     }
 
 
+    function copyReferalLink(code) {
+        let referalLink = const_data.FRONT_END_DOMAIN + "/sign_up/" + code
+        navigator.clipboard.writeText(referalLink)
+        toast.success("Referal link copied")
+    }
+
+
     return (
         <DashBoardLayout>
             <DashboardSectionTitle title={"Update Profile"} icon={"uil-user"}></DashboardSectionTitle>
@@ -210,15 +212,15 @@ function ProfileUpdate() {
                         </div>
                         <div className="col-md-9">
                             <Link class="user-item" to="#"><i class="uil uil-user"></i>{currentUser?.first_name + " " + currentUser?.last_name}</Link>
-                            <Link class="user-item" href="#"><i class="uil uil-tag"></i>{currentUser?.username}</Link>
-                            <Link class="user-item" href="#"><i class="uil uil-phone"></i>{currentUser?.mobile}</Link>
-                            <Link class="user-item" href="#"><i class="uil uil-envelope-add"></i>{currentUser?.email}</Link>
-                            <Link class="user-item" to="#">
+                            <Link class="user-item" to="#"><i class="uil uil-tag"></i>{currentUser?.username}</Link>
+                            <Link class="user-item" to="#"><i class="uil uil-phone"></i>{currentUser?.mobile}</Link>
+                            <Link class="user-item" to="#"><i class="uil uil-envelope-add"></i>{currentUser?.email}</Link>
+                            <Link class="user-item" to="">
                                 <i class="uil uil-megaphone"> </i>
                                 Referal Code : {currentUser?.referal_code}
 
 
-                                <i class="uil uil-clipboard"></i>
+                                <i class="uil uil-clipboard" onClick={() => { copyReferalLink(currentUser?.referal_code) }}></i>
 
                             </Link>
                             {/* <Link class="user-item" to="#"><i class="uil uil-user"></i>{currentUser?.firstName + " " + currentUser?.lastName}</Link> */}
@@ -339,24 +341,52 @@ function ProfileUpdate() {
                     </Formik>
                 </div>
                 <div className="col-md-12">
-                    <FullBox title={<h4>Update Password</h4>} footer={<Button1 title="Update Password" onClick={() => { passwordSubmitHandle() }}></Button1>}>
+                    <Formik
+                        initialValues={{
+                            password: "",
+                            cpassword: "",
+                            current_password: ""
+                        }}
+                        validationSchema={passwordValidation}
+                        onSubmit={passwordSubmitHandle}
+                    >
+                        <Form>
+                            <FullBox title={<h4>Update Password</h4>} footer={<Button1 title="Update Password" element_type="button" type="submit"></Button1>}>
 
-                        <div className="row">
-                            <div className="col-md-6">
-                                <InputWithLabel placeholder={"Current Password"} label={"Current Password"} onChange={(e) => { currentPasswordUpdater(e.target.value) }} isRequired={true} type={"password"} name={"password"} icon={<i className='uil-lock lgn_icon'></i>}></InputWithLabel>
-                            </div>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <label htmlFor="">Enter current password</label>
+                                        <div class="form-group pos_rel">
+                                            <Field class="form-control lgn_input" placeholder={"Enter Current Password"} type={"password"} id="current_password" name={"current_password"}></Field>
+                                            <i className='uil-envelope-alt lgn_icon'></i>
+                                        </div>
+                                        <ErrorMessage component="div" className="formValidateError" name="current_password"></ErrorMessage>
+                                    </div>
 
-                            <div className="col-md-6">
-                                <InputWithLabel placeholder={"Enter Password"} label={"Password"} onChange={(e) => { passwordStateUpdater(e.target.value) }} isRequired={true} type={"password"} name={"password"} icon={<i className='uil-lock lgn_icon'></i>}></InputWithLabel>
-                            </div>
-                            <div className="col-md-6">
-                                <InputWithLabel placeholder={"Enter Confirm Password"} label={"Confirm Password"} onChange={(e) => { cpasswordStateUpdater(e.target.value) }} isRequired={true} type={"password"} name={"cpassword"} icon={<i className='uil-lock lgn_icon'></i>}></InputWithLabel>
-                            </div>
-                        </div>
-                    </FullBox>
+                                    <div className="col-md-6">
+                                        <label htmlFor="">Enter New password</label>
+                                        <div class="form-group pos_rel">
+                                            <Field class="form-control lgn_input" placeholder={"Enter Password"} type={"password"} id="password" name={"password"}></Field>
+                                            <i className='uil-envelope-alt lgn_icon'></i>
+                                        </div>
+                                        <ErrorMessage component="div" className="formValidateError" name="password"></ErrorMessage>
+                                    </div>
+
+                                    <div className="col-md-6">
+                                        <label htmlFor="">Enter Confirm password</label>
+                                        <div class="form-group pos_rel">
+                                            <Field class="form-control lgn_input" placeholder={"Enter Confirm Password"} type={"password"} id="cpassword" name={"cpassword"}></Field>
+                                            <i className='uil-envelope-alt lgn_icon'></i>
+                                        </div>
+                                        <ErrorMessage component="div" className="formValidateError" name="cpassword"></ErrorMessage>
+                                    </div>
+                                </div>
+                            </FullBox>
+                        </Form>
+                    </Formik>
                 </div>
             </div>
-        </DashBoardLayout >
+        </DashBoardLayout>
     )
 }
 

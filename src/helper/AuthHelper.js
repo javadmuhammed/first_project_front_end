@@ -36,14 +36,33 @@ let authHelper = {
     },
 
 
-    setHeaderRequest: (jwt, reference) => {
+    setHeaderRequest: (jwt, reference) => { 
+        // instance.delete();
 
+        instance.interceptors.request.clear();
     
-
         instance.interceptors.request.use(function (config) {
 
             const jwtHeaderValue = "Bearer " + encodeURIComponent(jwt);
             const referenceHeaderValue = encodeURIComponent(reference);
+
+            config.headers.authorization = jwtHeaderValue;
+            config.headers.reference = referenceHeaderValue;
+
+
+            return config;
+        }, (error) => {
+            return Promise.reject(error);
+        });
+    },
+
+
+    clearHeaderREquest: () => { 
+        // instance.delete();
+        instance.interceptors.request.use(function (config) {
+
+            const jwtHeaderValue = "Bearer " + null;
+            const referenceHeaderValue = null;
 
             config.headers.authorization = jwtHeaderValue;
             config.headers.reference = referenceHeaderValue;

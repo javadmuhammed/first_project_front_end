@@ -1,31 +1,35 @@
-import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import LoadingSpinner from '../../Util/ElementRelated/LoadingSpinner'
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { Navigate, useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../../Util/ElementRelated/LoadingSpinner';
 
-function ProtectedRouter({ loggedComponent, }) {
-
-    let [isLoading, setIsLoading] = useState(true);
-    let userAuth = useSelector((state) => state.userAuth)
-    let navigate = useNavigate();
+function ProtectedRouter({ loggedComponent }) {
+    const [isLoading, setIsLoading] = useState(true);
+    const userAuth = useSelector((state) => state.userAuth);
+    const navigate = useNavigate();
+    const [moveToLogin, setMoveToLogin] = useState(false);
 
     useEffect(() => {
-        if ((!userAuth.isLoading && !userAuth.isLogged)) {
-            navigate("/login")
-        } else if (userAuth?.isLogged && !userAuth.isLoading) {
-            setIsLoading(false)
-        } 
-    }, [userAuth.isLoading])
+        if (!userAuth.isLoading) {
+            setIsLoading(false);
 
+            if (!userAuth.isLogged) {
+                setMoveToLogin(true);
+            }
+        }
+    }, [userAuth.isLoading, userAuth.isLogged]);
 
+    useEffect(() => {
+        if (moveToLogin) { 
+            navigate('/login', { replace: true });
+        }
+    }, [moveToLogin, navigate]);
 
+    if (isLoading) {
+        return <LoadingSpinner isShow={true}></LoadingSpinner>;
+    }
 
-    return (
-        <>
-            {isLoading ? <LoadingSpinner isShow={true}></LoadingSpinner> : loggedComponent}
-        </>
-
-    )
+    return <>{loggedComponent}</>;
 }
 
-export default ProtectedRouter
+export default ProtectedRouter;

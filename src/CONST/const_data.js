@@ -49,7 +49,7 @@ export const const_data = {
         create_invoice: "/create_invoice",
         invoice_phone_verification: "/invoice_phone_verification",
         invoice_update: "/invoice_update",
-        get_invoice_summary:"/get_invoice_summary",
+        get_invoice_summary: "/get_invoice_summary",
         buy_single_product: "/buy_single_product",
         get_single_invoice: "/get_single_invoice",
         apply_coupen: "/apply_coupen",
@@ -71,7 +71,8 @@ export const const_data = {
         get_top_category_product: "/get_top_category_product",
         get_banners: "/get_banners",
         create_wallet_order: "/create_wallet_order",
-        verify_wallet_order: "/verify_wallet_order"
+        verify_wallet_order: "/verify_wallet_order",
+        get_user_coupen_code: "/get_user_coupen_code"
     },
     PRODUCT_OPTION: {
         FRESH_VEGETABLES: 'FRESH VEGETABLES',

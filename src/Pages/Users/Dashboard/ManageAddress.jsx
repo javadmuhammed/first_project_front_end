@@ -6,11 +6,12 @@ import AdressItem from '../../../Component/Other/AdressItem'
 import AddressManageModel from '../../../Component/OverLay/AddressManageModel'
 import { deleteAddress, getUserAddress } from '../../../API/api_request'
 import EmptyScreen from '../../../Component/Util/Box/EmptyScreen'
+import { useSelector } from 'react-redux'
 
 function ManageAddress() {
 
   let [addressList, addressListUpdate] = useState([]);
-
+  let userData = useSelector((state) => state.userAuth.user)
 
   async function fetchUserAddress() {
     try {
@@ -21,7 +22,7 @@ function ManageAddress() {
     }
   }
 
-  useEffect(() => {
+  useEffect(() => { 
     fetchUserAddress()
   }, [])
 
@@ -41,6 +42,7 @@ function ManageAddress() {
   return (
     <DashBoardLayout>
       <AddressManageModel state={addressListUpdate}></AddressManageModel>
+
       <DashboardSectionTitle title={"Manage Address"} icon={"uil-location-point"} ></DashboardSectionTitle>
       <FullBox withoutFooter={true} title={<h4>My Address</h4>}>
         <a href="#" class="add-address hover-btn mt-0" data-toggle="modal" data-target="#address_model">Add New Address</a>
@@ -53,7 +55,7 @@ function ManageAddress() {
             })
           ) : <EmptyScreen bgColor={"white"} content={"Add your address before exploring cart"} title={"You don't have address"}></EmptyScreen>
         }
-         
+
 
       </FullBox>
     </DashBoardLayout>

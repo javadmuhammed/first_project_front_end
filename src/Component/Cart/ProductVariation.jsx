@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { fetchCartDetails } from '../../redux/slice/CartItems';
 
-function ProductVariation({ product_id, cart_id, selected_variation = const_data.PRODUCT_VARIATION['1kg'] }) {
+function ProductVariation({ product_id, cart_id, selected_variation = const_data.PRODUCT_VARIATION['1kg'], code }) {
 
     //selected_variation will be number
 
@@ -13,12 +13,10 @@ function ProductVariation({ product_id, cart_id, selected_variation = const_data
     let dispatch = useDispatch();
 
 
-    // useEffect(() => {
-    //     alert(selectedVariation)
-    // }, [selectedVariation])
+     
 
     async function updateCartVariation(variation) {
- 
+
         let valueVariation = const_data.PRODUCT_VARIATION[variation];
 
 
@@ -28,7 +26,7 @@ function ProductVariation({ product_id, cart_id, selected_variation = const_data
 
                 let variationData = await cartVariationUpdate(cart_id, product_id, variation)
                 let response = variationData.data;
- 
+
                 if (!response?.status) {
                     setSelectedVariation(variation)
                 } else {
@@ -48,20 +46,21 @@ function ProductVariation({ product_id, cart_id, selected_variation = const_data
 
     return (
         <div class="cart-radio">
-            
+
             <ul class="kggrm-now">
                 {
                     Object.keys(const_data.PRODUCT_VARIATION).map((items, index) => {
 
                         let isChecked = const_data.PRODUCT_VARIATION[items] === selectedVariation;
 
+
                         return (
                             <li>
-                            
-                                <input type="radio" checked={isChecked} id={"a1_crt_" + index + product_id} name={"a1_crt_" + product_id} onClick={() => {
+
+                                <input type="radio" checked={isChecked} id={"a1_crt_" + code + index + product_id + cart_id} name={"a1_crt_" + code + index + product_id + cart_id} onClick={() => {
                                     updateCartVariation(items)
                                 }} />
-                                <label for={"a1_crt_" + index + product_id}>{items + " -  " + const_data.PRODUCT_VARIATION[items] }</label>
+                                <label for={"a1_crt_" + code + index + product_id + cart_id}>{items + " -  " + selectedVariation}</label>
                             </li>
                         )
                     })

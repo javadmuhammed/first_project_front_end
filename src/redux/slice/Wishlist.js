@@ -58,6 +58,11 @@ export let WishlistSlicer = createSlice({
         wishlist_items: [],
         refresh_required: true,
     },
+    reducers: {
+        clearWishlist: (state, action) => {
+            state.wishlist_items = [] 
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(removeFromWishlistThunk.fulfilled, (state, action) => {
             let payload = action.payload;
@@ -76,7 +81,7 @@ export let WishlistSlicer = createSlice({
             if (response?.status) {
                 let wishlist = response?.wishlist;
                 state.wishlist_items = wishlist;
-                state.refresh_required=false;
+                state.refresh_required = false;
             }
         }).addCase(addToWishListThunk.fulfilled, (state, action) => {
             state.refresh_required = true;

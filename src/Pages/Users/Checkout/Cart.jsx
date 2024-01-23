@@ -37,6 +37,19 @@ function Cart() {
     let [allAddress, selectAllAddress] = useState([]);
     let [currentAddress, setCurrentAddress] = useState(null);
 
+    let userData = useSelector((state) => state.userAuth.user)
+
+
+    useEffect(() => {
+ 
+        if (allAddress?.length == 1) { 
+            let findPrimary = allAddress[0] 
+            if (findPrimary) { 
+                setCurrentAddress(findPrimary)
+            }  
+        }
+    }, [allAddress])
+
 
 
 
@@ -53,20 +66,20 @@ function Cart() {
 
 
 
+    // useEffect(() => {
+    //     let findPrimary = allAddress?.find((fp) => fp.is_primary == true);
+    //     if (findPrimary) {
+    //         console.log(findPrimary)
+    //         setCurrentAddress(findPrimary)
+    //     } else {
+    //         console.log(allAddress)
+    //     }
+
+    // }, [allAddress])
+
     useEffect(() => {
-        let findPrimary = allAddress?.find((fp) => fp.is_primary == true);
-        if (findPrimary) {
-            console.log(findPrimary)
-            setCurrentAddress(findPrimary)
-        } else {
-            console.log(allAddress)
-        }
 
-    }, [allAddress])
 
-    useEffect(() => {
-
- 
 
         getUserAddress()
             .then((data) => {
@@ -94,8 +107,8 @@ function Cart() {
 
     function createInvoiceAction() {
 
-        let localData = JSON.parse(localStorage.getItem("profile"))?.user;
-        let phoneNumber = localData?.mobile;
+
+        let phoneNumber = userData?.mobile
 
 
         if (selectedAddress == null || selectedAddress == "") {
@@ -108,7 +121,7 @@ function Cart() {
                     let dataResult = data?.data;
                     console.log(dataResult)
 
-                    
+
 
 
                     if (dataResult?.status) {
@@ -200,7 +213,7 @@ function Cart() {
                                         title: "100% Genuine Products",
                                         icon: "check-square"
                                     }, {
-                                          title: "Secure Payments",
+                                        title: "Secure Payments",
                                         icon: "shield-check"
                                     }]}>
 

@@ -47,32 +47,35 @@ function UserLoggin() {
 
                     let loggedUser = user.data?.user;
 
-                    let userLocalData = {
-                        username: loggedUser?.username,
-                        email: loggedUser?.email,
-                        mobile: loggedUser?.mobile,
-                        firstName: loggedUser?.first_name,
-                        lastName: loggedUser?.last_name,
-                        profile_pic: loggedUser?.profile_pic,
-                        wallet_amount: loggedUser?.wallet_amount,
-                        total_wallet_credit: loggedUser?.total_wallet_credit,
-                        last_wallet_update: loggedUser?.last_wallet_update, 
-                        referal_code: loggedUser?.referal_code, 
-                    }
+                    // let userLocalData = {
+                    //     username: loggedUser?.username,
+                    //     email: loggedUser?.email,
+                    //     mobile: loggedUser?.mobile,
+                    //     firstName: loggedUser?.first_name,
+                    //     lastName: loggedUser?.last_name,
+                    //     profile_pic: loggedUser?.profile_pic,
+                    //     wallet_amount: loggedUser?.wallet_amount,
+                    //     total_wallet_credit: loggedUser?.total_wallet_credit,
+                    //     last_wallet_update: loggedUser?.last_wallet_update, 
+                    //     referal_code: loggedUser?.referal_code, 
+                    // }
 
+                    console.log(user.data.user.access_token, user.data.user._id)
                     authHelper.setJWTToken(user.data.user.access_token, user.data.user._id) 
-                    authHelper.setUserToLocalStorage(userLocalData)
+                    // authHelper.setUserToLocalStorage(userLocalData)
+
                     authHelper.setHeaderRequest(user.data.user.access_token,user.data.user._id)
+                    
                     dispatcher(await getUserByJwtToken({ jwt: loggedUser?.access_token})) 
                     dispatcher(await fetchCartDetails())
  
                     setIsSpinning(false)
                     navigate("/")
-                } else {
+                } else { 
                     setIsSpinning(false)
                     alertUpdate({ component: ComponentHelper.fetchComponent(const_data.ALERT_TYPE.ERROR, user.data?.msg) })
                 }
-            }).catch((err) => {
+            }).catch((err) => { 
                 setIsSpinning(false)
                 alertUpdate({ component: ComponentHelper.fetchComponent(const_data.ALERT_TYPE.ERROR, err?.msg) })
             })

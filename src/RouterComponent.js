@@ -24,6 +24,7 @@ import ProductSearching from './Pages/Users/Product/ProductSearching'
 import ViewAllCategory from './Pages/Users/Category/ViewAllCategory'
 import ProtectedRouter from './Component/UserPartials/UserLayout/ProtectedRouter'
 import RestrictedRouter from './Component/UserPartials/UserLayout/RestrictedRouter'
+import Coupens from './Pages/Users/Other/Coupens'
 
 function RouterComponent() {
 
@@ -50,13 +51,17 @@ function RouterComponent() {
                 <Route path="/order_single_item/:order_id" element={<ProtectedRouter loggedComponent=<OrderSingleItemView/>  />}> </Route>
                 <Route path="/profile_update" element={<ProtectedRouter loggedComponent=<ProfileUpdate/>  />}> </Route>
 
+                <Route path="/coupens" element={<Coupens></Coupens>}> </Route>
+
+                
+
                 <Route path="/product_view/:product_id" element={<SingleProductView />}> </Route>
                 <Route path="/product_searching" element={<ProductSearching />}> </Route>
 
                 <Route path="/cart" element={<ProtectedRouter loggedComponent=<Cart/>  />}> </Route>
                 <Route path="/checkout" element={<ProtectedRouter loggedComponent=<Checkout/>  />}> </Route>
                 <Route path="/order_success/:invoice_id" element={<ProtectedRouter loggedComponent=<CheckoutSuccess/>  />}> </Route>
-                <Route path="/invoice_view/:order_id" element={<InvoiceView />}> </Route>
+                {/* <Route path="/invoice_view/:order_id" element={<InvoiceView />}> </Route> */}
 
                 <Route path="/coupen_list" element={<CoupenList />}> </Route>
 

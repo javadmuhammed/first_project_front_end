@@ -32,28 +32,28 @@ function Checkout() {
     let dispatch = useDispatch()
     let [isReadyToPlace, setIsReadyToPlace] = useState(false);
     let [invoiceSummary, setInvoiceSummary] = useState({});
-    
+
 
     // let cartData = useSelector((state) => state.userCart);
     // console.log(cartData)
 
     useEffect(() => {
         invoiceSummaryApi(invoiceID).then((data) => {
-            let response = data?.data;
+            let response = data?.data 
             if (response?.status) {
                 setInvoiceSummary(response?.summery)
                 setIsReadyToPlace(true)
             } else {
-                navigate("/cart")
+                navigate("/cart", { replace: true })
             }
         }).catch((err) => {
-            navigate("/cart")
+            navigate("/cart", { replace: true })
         })
     }, [])
 
     useEffect(() => {
         if (invoiceID == null || phoneNumber == null) {
-            navigate("/cart")
+            navigate("/cart", { replace: true })
         }
 
         getSingleInvoice(invoiceID).then((data) => {
@@ -183,7 +183,7 @@ function Checkout() {
                         <div className="col-md-8">
                             <div id="checkout_wizard" class="checkout accordion left-chck145">
                                 <div class="checkout-step">
-                                    
+
                                     <PhoneVerification></PhoneVerification>
                                 </div>
                                 <div class="checkout-step">

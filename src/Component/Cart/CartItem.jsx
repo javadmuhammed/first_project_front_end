@@ -26,7 +26,7 @@ function CartItem({stock, cart_id, productImage, productTitle, productQuanity, s
                 <div class="cart-text">
                     <h4>{productTitle} </h4>
                     <div class="cart-radio">
-                         <ProductVariation cart_id={cart_id} product_id={product_id} selected_variation={selected_variation} ></ProductVariation>
+                         <ProductVariation code="cartItemPage" cart_id={cart_id} product_id={product_id} selected_variation={selected_variation} ></ProductVariation>
                     </div>
                     <div class="qty-group">
                         <ProductQuanityManagerInCart stock={stock} cart_id={cart_id} onQuanityUpdate={onCartUpdate} currentValue={productQuanity} product_id={product_id} ></ProductQuanityManagerInCart>

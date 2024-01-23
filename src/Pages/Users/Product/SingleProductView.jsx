@@ -22,6 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { checkoutAction } from '../../../redux/slice/CartCheckout';
 import SelectAddressOverlay from '../../../Component/OverLay/SelectAddress';
 import VariationManager from '../../../Component/Product/VariationManager';
+import AddressManageModel from '../../../Component/OverLay/AddressManageModel';
 
 function SingleProductView() {
 
@@ -36,7 +37,7 @@ function SingleProductView() {
     let isLogged = useSelector((state) => state.userAuth.isLogged)
     let [selectedVariation, setSelectedVariation] = useState(const_data.PRODUCT_VARIATION['1kg'])
     let dispatch = useDispatch();
-
+    let userData = useSelector((state) => state.userAuth.user)
 
     useEffect(() => {
 
@@ -69,8 +70,8 @@ function SingleProductView() {
     function buySingleProduct() {
 
         try {
-            let localData = JSON.parse(localStorage.getItem("profile"))?.user;
-            let phoneNumber = localData?.mobile;
+
+            let phoneNumber = userData?.mobile
 
 
             if (selectedAddress == "" || selectedAddress == null) {
@@ -181,6 +182,7 @@ function SingleProductView() {
 
 
                     <Fragment>
+                        <AddressManageModel state={setAllAddress}></AddressManageModel>
                         <SelectAddressOverlay confirmButton={true} allAddress={allAddress} state={setSelectedAddress}></SelectAddressOverlay>
                         <CartUserOverCanvas />
                         <CategoryModalUser></CategoryModalUser>

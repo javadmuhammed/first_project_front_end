@@ -30,7 +30,7 @@ function AddressManageModel({ state }) {
         pincode: Yup.number("Please enter valid Pin code").required('Pincode is required'),
         landmark: Yup.string().trim().required("Landmark is required"),
         phoneNumber: Yup.string().trim().matches(/^\d{10}$/, 'Phone number must be 10 digits').required("Phone number is required"),
-        altPhoneNumber: Yup.string().trim().matches(/^\d{10}$/, 'Alternate phone number must be 10 digits').required("Alternative number is required"),
+        altPhoneNumber: Yup.string().trim().notOneOf([Yup.ref('phoneNumber')], 'Alternative Number should not be the same as Phone number').matches(/^\d{10}$/, 'Alternate phone number must be 10 digits').required("Alternative number is required"),
         email: Yup.string().trim().email('Invalid email address').required("Email address required"),
         address: Yup.string().trim().required('Address is required'),
     });
@@ -91,7 +91,7 @@ function AddressManageModel({ state }) {
             let response = data?.data;
             if (response?.status) {
                 toast.success("Address added success")
-                setAddressTypes([...addressTypes, type])
+                // setAddressTypes([...addressTypes, type])
                 addressTypeStateUpdate(type)
             } else {
                 toast.error(response.msg)
@@ -104,14 +104,18 @@ function AddressManageModel({ state }) {
 
 
     useEffect(() => {
-        let userAddress = userData?.extra_address_type;
-        let tempAddressTypes = [...Object.values(const_data.ADDRESS_TYPE),...userAddress]
+        let userAddress = userData?.extra_address_type ?? [];
+        let tempAddressTypes;
+        if (userAddress[0] == const_data.ADDRESS_TYPE.HOME) {
+            tempAddressTypes = [...userAddress]
+        } else {
+            tempAddressTypes = [...Object.values(const_data.ADDRESS_TYPE), ...userAddress]
+        }
         setAddressTypes(tempAddressTypes)
-         
-    }, [])
+    }, [userData?.extra_address_type])
 
     return (
-        <div id="address_model" class="header-cate-model main-gambo-model modal fade" tabindex="-1" role="dialog" aria-modal="false">
+        <div id="address_model" style={{zIndex:"1150"}} class="header-cate-model main-gambo-model modal fade" tabindex="-1" role="dialog" aria-modal="false">
             <div class="modal-dialog category-area" role="document">
                 <div class="category-area-inner">
                     <div class="modal-header">

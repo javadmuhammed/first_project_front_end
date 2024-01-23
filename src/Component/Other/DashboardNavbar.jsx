@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux'
 import { userAction } from '../../redux/slice/UserSlicer'
 import { Link, useLocation } from 'react-router-dom';
 import { cartItemActions } from '../../redux/slice/CartItems';
+import { wishlistAction } from '../../redux/slice/Wishlist';
+import authHelper from '../../helper/AuthHelper';
 
 function DashboardNavbar() {
 
@@ -12,8 +14,9 @@ function DashboardNavbar() {
 
     function onLogout() {
         dispatch(cartItemActions.clearCart())
-        dispatch(userAction.userLogout()) 
-        window.location.href="/"
+        dispatch(wishlistAction.clearWishlist())
+        authHelper.clearHeaderREquest();
+        dispatch(userAction.userLogout())  
     }
 
 

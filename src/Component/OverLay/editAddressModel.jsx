@@ -7,30 +7,18 @@ import * as Yup from 'yup'
 import { toast } from 'react-toastify';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import InputWithIconButton from '../Util/Input/InputWithIconButton';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { userAction } from '../../redux/slice/UserSlicer';
 
 function EditAddressModel({ address_id, data_target, address_data, state }) {
 
     // 
-    let [addressTypeState, addressTypeStateUpdate] = useState(address_data?.type);
+    let [addressTypeSelected, setAddressTypeSelected] = useState(address_data?.type);
 
-
-
-
-    // let [nameState, nameStateUpdate] = useState(address_data.name);
-    // let [houseNameState, houseNameStateUpdate] = useState(address_data.house_name);
-    // let [cityState, cityStateStateUpdate] = useState(address_data.city_town_dist);
-    // let [stateState, stateStateUpdate] = useState(address_data.state);
-    // let [pincodeState, pincodeStateUpdate] = useState(address_data.pincode);
-    // let [landmarkState, landmarkStateUpdate] = useState(address_data.landmark);
-    // let [phoneNumberState, phoneNumberStateUpdate] = useState(address_data.phone_number);
-    // let [AltphoneNumberState, AltphoneNumberStateUpdate] = useState(address_data.alternative_phone);
-    // let [emailState, emailStateUpdate] = useState(address_data.email);
-    // let [addressState, adressStateUpdate] = useState(address_data.address);
-    // let [alertComponent, alertComponetUpdate] = useState({ component: null })
     let [addressTypes, setAddressTypes] = useState([])
     let [toogleNewAddressType, setToogleNewAddressType] = useState(false);
     let userData = useSelector((state) => state.userAuth.user)
+    let dispatch = useDispatch();
 
     const addressValidation = Yup.object().shape({
         //addressType: Yup.string().required('Address type is required'),
@@ -41,21 +29,19 @@ function EditAddressModel({ address_id, data_target, address_data, state }) {
         pincode: Yup.number("Please enter valid Pin code").required('Pincode is required'),
         landmark: Yup.string().trim().required("Landmark is required"),
         phoneNumber: Yup.string().trim().matches(/^\d{10}$/, 'Phone number must be 10 digits').required("Phone number is required"),
-        altPhoneNumber: Yup.string().trim().matches(/^\d{10}$/, 'Alternate phone number must be 10 digits').required("Alternative number is required"),
+        altPhoneNumber: Yup.string().trim().notOneOf([Yup.ref('phoneNumber')], 'Alternative Number should not be the same as Phone number').matches(/^\d{10}$/, 'Alternate phone number must be 10 digits').required("Alternative number is required"),
         email: Yup.string().trim().email('Invalid email address').required("Email address required"),
         address: Yup.string().trim().required('Address is required'),
     });
 
 
     function updateAddressType(type) {
-        // alert(type)
-        addressTypeStateUpdate(type)
+        setAddressTypeSelected(type)
     }
 
 
-    useEffect(() => {
-        alert("Hello world" + addressTypeState)
-    }, [addressTypeState])
+
+
 
 
     let initAddress = {
@@ -80,8 +66,12 @@ function EditAddressModel({ address_id, data_target, address_data, state }) {
             let response = data?.data;
             if (response?.status) {
                 toast.success("Address added success")
-                setAddressTypes([...addressTypes, type])
-                addressTypeStateUpdate(type)
+                let userAddressType = [...addressTypes, type]
+                let newUser = JSON.parse(JSON.stringify(userData))
+                newUser.extra_address_type = userAddressType;
+                dispatch(userAction.updateUser({ user: newUser }))
+                setAddressTypeSelected(type)
+                // setAddressTypesToState(userAddressType)
             } else {
                 toast.error(response.msg)
             }
@@ -89,19 +79,26 @@ function EditAddressModel({ address_id, data_target, address_data, state }) {
             toast.error("Something went wrong")
         })
     }
-
+ 
 
     useEffect(() => {
-        let userAddress = userData?.extra_address_type;
-        let tempAddressTypes = [...Object.values(const_data.ADDRESS_TYPE), ...userAddress]
+        let userAddress = userData?.extra_address_type ?? []
+        let tempAddressTypes;
+        if (userAddress[0] == const_data.ADDRESS_TYPE.HOME) {
+            tempAddressTypes = [...userAddress]
+        } else {
+            tempAddressTypes = [...Object.values(const_data.ADDRESS_TYPE), ...userAddress]
+        }
         setAddressTypes(tempAddressTypes)
-    }, [])
+    }, [userData?.extra_address_type])
 
+    
 
     function onAddressFormSubmit(values) {
 
+ 
         const address = {
-            addressType: addressTypeState,
+            type: addressTypeSelected,
             name: values.name,
             house_name: values.houseName,
             city_town_dist: values.city,
@@ -113,12 +110,11 @@ function EditAddressModel({ address_id, data_target, address_data, state }) {
             email: values.email,
             address: values.address,
         };
+ 
 
-        updateAddress(address, address_id).then((data) => {
-
+        updateAddress(address, address_id).then((data) => { 
             toast.success("Address update success")
-        }).catch((err) => {
-            alert(err)
+        }).catch((err) => { 
             toast.error("Something went wrong")
         })
     }
@@ -139,14 +135,14 @@ function EditAddressModel({ address_id, data_target, address_data, state }) {
                     </div>
                     <div class="category-model-content modal-content">
                         <div class="cate-header">
-                            <h4>Edit address  {addressTypeState}</h4>
+                            <h4>Edit address  {addressTypeSelected}</h4>
                         </div>
                         <div class="add-address-form">
                             <div class="checout-address-step">
                                 <div class="row">
                                     <div class="col-lg-12">
                                         <Formik validate={() => {
-                                            if (addressTypeState == "" || addressTypeState == null) {
+                                            if (addressTypeSelected == "" || addressTypeSelected == null) {
                                                 return {
                                                     addressType: "Please select Address Type"
                                                 }
@@ -167,11 +163,12 @@ function EditAddressModel({ address_id, data_target, address_data, state }) {
                                                                             onClick={() => {
                                                                                 updateAddressType(each)
                                                                             }}
-                                                                            id={"adedit1" + each}
+                                                                            id={"adedit1" + each + address_id}
                                                                             name="addressedit1"
-                                                                            {...(each === addressTypeState ? { checked: true } : {})}
+                                                                            {...(each === addressTypeSelected ? { checked: true } : {})}
+                                                                            data-ischecked={addressTypeSelected + " " + each}
                                                                         />
-                                                                        <label for={"adedit1" + each}>{each}  </label>
+                                                                        <label for={"adedit1" + each + address_id}>{each}  </label>
                                                                     </li>)
                                                                 })
                                                             }
@@ -179,8 +176,8 @@ function EditAddressModel({ address_id, data_target, address_data, state }) {
 
 
                                                             <li>
-                                                                <input type="radio" onClick={() => { setToogleNewAddressType(!toogleNewAddressType) }} id="addressAddEdit" name="addressAddEdit" />
-                                                                <label for="addressAddEdit">{!toogleNewAddressType ? "+" : "x"}</label>
+                                                                <input type="radio" onClick={() => { setToogleNewAddressType(!toogleNewAddressType) }} id={"addressAddEdit" + address_id} name={"addressAddEdit" + address_id} />
+                                                                <label for={"addressAddEdit" + address_id}>{!toogleNewAddressType ? "+" : "x"}</label>
                                                             </li>
                                                         </ul>
                                                         <ErrorMessage name="addressType" component="div" className="formValidateError" ></ErrorMessage>

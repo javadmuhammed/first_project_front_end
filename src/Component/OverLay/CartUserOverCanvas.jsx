@@ -63,7 +63,7 @@ function CartUserOverCanvas() {
                     </div>
                 </div>
             </div>
-        </Fragment >
+        </Fragment>
     )
 }
 

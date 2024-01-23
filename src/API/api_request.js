@@ -272,6 +272,11 @@ export async function getAllWishlist() {
     return await instance.get(const_data.API_ENDPOINT.get_banners);
 }
 
+export async function getCoupenCode()
+{ 
+    return await instance.get(const_data.API_ENDPOINT.get_user_coupen_code);
+}
+
 
 export async function getCategoryMinimize(count, skip) {
 

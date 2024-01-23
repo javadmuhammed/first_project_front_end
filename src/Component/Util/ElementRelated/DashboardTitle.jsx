@@ -7,7 +7,11 @@ import UserProfile from './UserProfile';
 
 function DashboardTitle() {
 
-     let userData = useSelector((state) => state.userAuth.user);
+    let userData = useSelector((state) => state.userAuth.user);
+
+    function phoneNumberEdit() {
+
+    }
 
     return (
         <div class="dashboard-group">
@@ -24,7 +28,10 @@ function DashboardTitle() {
                             </div> */}
                             <UserProfile />
                             <h4>{userData?.username}</h4>
-                            <p>{userData?.mobile}<a href="#"><i class="uil uil-edit"></i></a></p>
+                            <p>{userData?.mobile}
+                                {/* <a onClick={phoneNumberEdit} href="javascript:;"><i class="uil uil-edit"></i>
+                            </a>
+                            */}</p>
                             <div class="earn-points"><img src="images/Dollar.svg" alt="" />Wallet Amount : <span>{userData?.wallet_amount}</span></div>
                         </div>
                     </div>

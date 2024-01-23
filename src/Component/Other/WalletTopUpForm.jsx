@@ -66,8 +66,8 @@ function WalletTopUpForm({ on_success }) {
     }
 
     let validateWallet = Yup.object().shape({
-        full_name: Yup.string("Enter full name").required("Please enter full name"),
-        phone_number: Yup.string("Enter full name").length(10,"Please enter 10 digit phone number").required("Please enter phone number"),
+        full_name: Yup.string("Enter full name").trim().required("Please enter full name"),
+        phone_number: Yup.number("Enter valid number").length(10,"Please enter 10 digit phone number").required("Please enter phone number"),
         amount: Yup.number("Enter amount name").min(10,"10-/ Minimum").max(10000,"Maximum 10000").required("Please enter amount"),
     })
 
