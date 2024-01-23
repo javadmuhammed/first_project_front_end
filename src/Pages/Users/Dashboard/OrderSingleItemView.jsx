@@ -129,9 +129,7 @@ function OrderSingleItemView({ productData }) {
                                 <div>
                                     <div className="row justify-content-between align-items-center">
                                         <div className="col-md-6">
-                                            <div className="d-flex justify-content-start">
-                                                <p className='mb-0'>Post Feedback</p>
-                                            </div>
+                                             
                                         </div>
                                         <div className="col-md-6">
                                             <div className="d-flex justify-content-end">

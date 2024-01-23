@@ -32,16 +32,12 @@ function WishListButton({ product_id, is_save_icon }) {
         if (isUserLogged) {
             if (isInclude) {  
                 try {
-                    dispatch(await removeFromWishlistThunk({ product_id })) //await addToWishListHelper(product_id)
-                    // toast.success("Removed from wishlist") 
+                    dispatch(await removeFromWishlistThunk({ product_id }))  
                     setIsInclude(false)
                 } catch (e) { }
             } else { 
-                try {
-                    // alert(product_id)
-                    dispatch(await addToWishListThunk({ product_id })) 
-                    // dispatch(await fetchUserWishlist()) 
-                    // toast.success("Item addedd to wishlist")
+                try { 
+                    dispatch(await addToWishListThunk({ product_id }))  
                     setIsInclude(true)
                 } catch (e) { }
             }
@@ -52,8 +48,7 @@ function WishListButton({ product_id, is_save_icon }) {
 
 
     return (
-        <Fragment>
-            {/* {isInclude ? "Y" : " N"} */}
+        <Fragment> 
             <span className={"wishlitsIcon " + (isInclude ? "save-icon liked" : "") + (isInclude ? " liked" : "")} onClick={wishlistControl} title="wishlist"></span>
         </Fragment>
     )

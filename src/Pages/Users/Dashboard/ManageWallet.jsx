@@ -30,6 +30,7 @@ function ManageWallet() {
       let response = data?.data; 
       if (response?.status) {
         let history = response?.history?.wallet_details;
+        console.log(history)
         walletHistoryUpdate(history)
       }
     }).catch((err) => {
@@ -86,8 +87,8 @@ function ManageWallet() {
             <div class="history-body scrollstyle_4" style={{ height: "auto" }}>
               <ul class="history-list">
 
-                {
-                  (userWalletHistory?.length < 1 || !userWalletHistory) ? (
+                {/* {
+                  userWalletHistory?.length < 1 || !userWalletHistory ? (
                     <EmptyScreen bgColor={"white"} content={"You don;t have any transactionns"} title={"Empty Transactions"}></EmptyScreen>
                   ) : (
                     userWalletHistory?.map((history) => {
@@ -98,7 +99,7 @@ function ManageWallet() {
                       )
                     })
                   )
-                }
+                } */}
 
 
               </ul>

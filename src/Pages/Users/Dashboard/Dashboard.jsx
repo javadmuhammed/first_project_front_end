@@ -31,7 +31,7 @@ function Dashboard() {
                 <h4 class="alert-heading"><i class="uil uil-megaphone"> </i> Refer & Earn</h4>
                 <p>Aww yeah, Grow your wallet balance by introducing our service to your family and friends! When they sign up, you're sure to receive a guaranteed referral bonus. Start spreading the word and watch your rewards increase!</p>
                 <hr />
-                <p class="mb-0" onClick={() => {
+                <p type="button" class="mb-0" onClick={() => {
                     let referalLink = const_data.FRONT_END_DOMAIN + "/sign_up/" + userData.referal_code
                     navigator.clipboard.writeText(referalLink)
                     toast.success("Referal link copied")

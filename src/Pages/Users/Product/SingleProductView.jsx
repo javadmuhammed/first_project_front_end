@@ -202,15 +202,16 @@ function SingleProductView() {
                                                         slidesToScroll: 1,
                                                         infinite: false
                                                     }}>
-                                                        <div className="item">
-                                                            <SingleProductImage src={const_data.public_image_url + "/web_images_lemon.webp"} />
-                                                        </div>
-                                                        <div className="item">
-                                                            <SingleProductImage src={const_data.public_image_url + "/web_images_lemon.webp"} />
-                                                        </div>
-                                                        <div className="item">
-                                                            <SingleProductImage src={const_data.public_image_url + "/web_images_lemon.webp"} />
-                                                        </div>
+                                                        {
+                                                            thisProduct?.images?.map((image) => {
+                                                                return (
+                                                                    <div className="item">
+                                                                        <SingleProductImage src={const_data.public_image_url +"/"+ image} />
+                                                                    </div>
+                                                                )
+                                                            })
+                                                        }
+ 
                                                     </SliderComponent>
                                                 </div>
                                                 <div class="col-lg-8 col-md-8">

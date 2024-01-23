@@ -126,6 +126,8 @@ function Checkout() {
 
         if (isReadyToPlace) {
 
+            
+
             if (selectedPaymentMethod == const_data.PAYMENT_METHOD.RAZORPAY) {
 
                 razorpayeOrderCreate(invoiceID).then((order_data) => {
@@ -150,7 +152,7 @@ function Checkout() {
                     order_placed: true,
                 }).then(async (placedOrder) => {
                     let data = placedOrder.data;
-
+                    console.log(data)
                     if (data?.status) {
                         let is_coupen = data?.coupen;
                         if (is_coupen) {

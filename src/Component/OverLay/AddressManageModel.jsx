@@ -59,10 +59,10 @@ function AddressManageModel({ state }) {
             state: values.state,
             address: values.address,
             pincode: values.pincode,
-            landmark: values.phoneNumber,
-            phone_number: values.altPhoneNumber,
+            landmark: values.landmark,
+            phone_number: values.phoneNumber, 
             email: values.email,
-            alternative_phone: values.address
+            alternative_phone: values.altPhoneNumber
         }
 
         addNewAddress({ address }).then((data) => {
@@ -91,7 +91,7 @@ function AddressManageModel({ state }) {
             let response = data?.data;
             if (response?.status) {
                 toast.success("Address added success")
-                // setAddressTypes([...addressTypes, type])
+                setAddressTypes([...addressTypes, type])
                 addressTypeStateUpdate(type)
             } else {
                 toast.error(response.msg)

@@ -59,7 +59,7 @@ function CartUserOverCanvas() {
                     </div>
                     <div className="checkout-cart">
                         <ButtonWithoutBg type="a" url="#" title="Apply Promo Code" onClick={() => { }}></ButtonWithoutBg>
-                        <Button1 element_type="a" type="button" url="/cart" title="View Cart" onClick={() => { }} />
+                        <Button1 classList={['close_bg_wrapper bs-canvas-close ']} element_type="a" type="button" url="/cart" title="View Cart" onClick={() => { }} />
                     </div>
                 </div>
             </div>

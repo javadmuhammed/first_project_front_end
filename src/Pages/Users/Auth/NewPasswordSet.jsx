@@ -21,7 +21,7 @@ function NewPasswordSet() {
     let [cpassword, cpasswordUpdate] = useState();
     let [alertComponent, alertComponetUpdate] = useState({ component: null })
     let navigate = useNavigate()
-    let [isSpinning,setIsSpinning] = useState(false);
+    let [isSpinning, setIsSpinning] = useState(false);
 
     let newPasswordValidation = Yup.object().shape({
         password: Yup.string().trim().required("Password is required").min(6, 'Password must be at least 6 characters'),
@@ -45,7 +45,7 @@ function NewPasswordSet() {
                         navigate("/login")
                     }, 5000)
 
-                    // alertComponetUpdate({ component: ComponentHelper.fetchComponent(const_data.ALERT_TYPE.SUCCESS, "Password update success, you can loggin now") })
+                    alertComponetUpdate({ component: null })
                 } else {
                     setIsSpinning(false)
                     alertComponetUpdate({ component: ComponentHelper.fetchComponent(const_data.ALERT_TYPE.ERROR, response?.msg) })

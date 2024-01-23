@@ -38,12 +38,7 @@ function EditAddressModel({ address_id, data_target, address_data, state }) {
     function updateAddressType(type) {
         setAddressTypeSelected(type)
     }
-
-
-
-
-
-
+ 
     let initAddress = {
         addressType: address_data.type,
         name: address_data.name,

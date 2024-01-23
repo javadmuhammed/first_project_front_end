@@ -46,6 +46,7 @@ function Cart() {
             let findPrimary = allAddress[0] 
             if (findPrimary) { 
                 setCurrentAddress(findPrimary)
+                setSelectedAddress(findPrimary?._id)
             }  
         }
     }, [allAddress])

@@ -60,7 +60,7 @@ export let WishlistSlicer = createSlice({
     },
     reducers: {
         clearWishlist: (state, action) => {
-            state.wishlist_items = [] 
+            state.wishlist_items = []
         }
     },
     extraReducers: (builder) => {
@@ -78,6 +78,7 @@ export let WishlistSlicer = createSlice({
         }).addCase(fetchUserWishlist.fulfilled, (state, action) => {
             let payload = action.payload;
             let response = payload?.data;
+            console.log(response)
             if (response?.status) {
                 let wishlist = response?.wishlist;
                 state.wishlist_items = wishlist;

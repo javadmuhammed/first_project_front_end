@@ -11,14 +11,17 @@ function UserProfile() {
     let userData = useSelector((state) => state.userAuth.user);
     let dispatch = useDispatch();
 
-    let [profileImage, profileStateUpdate] = useState(userData?.profile_pic ?? getAvtarImage())
+    let [profileImage, profileStateUpdate] = useState()
 
 
     useEffect(() => {
-        if (userData?.profile != null && userData?.profile != "") {
+        if (userData?.profile != null && userData?.profile != "") { 
             profileStateUpdate(const_data.user_profile_path + "/" + userData?.profile)
         }
     }, [userData])
+
+
+  
 
 
     function onProfileImageChange(profile) {
@@ -33,13 +36,12 @@ function UserProfile() {
 
             console.log(data)
             if (data.data?.status) {
-                let dpImage = data.data?.profileImage; 
-                let profileImageUrl = const_data.user_profile_path + "/" + dpImage;
-                profileStateUpdate(profileImageUrl)
+                let dpImage = data.data?.profileImage;
+
+                let profileImageUrl =  dpImage;  
                 let updateDate = { ...userData };
                 updateDate.profile = profileImageUrl;
-                dispatch(userAction.updateUser({ user: updateDate }))
-                // authHelper.setUserToLocalStorage(updateDate)
+                dispatch(userAction.updateUser({ user: updateDate })) 
             }
         }).catch((err) => {
             console.log(err)
@@ -49,7 +51,7 @@ function UserProfile() {
 
     return (
         <div class="user-img">
-            <img src={profileImage} alt="" />
+            <img src={profileImage ?? getAvtarImage()} alt="" />
 
             <div class="img-add">
                 <input type="file" onChange={(e) => { onProfileImageChange(e.target.files[0]) }} id="file" />

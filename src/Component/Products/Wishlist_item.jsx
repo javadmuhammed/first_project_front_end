@@ -6,6 +6,7 @@ import { removeFromWishlistThunk, wishlistSendToCartThunk } from '../../redux/sl
 import { wishlistToCart } from '../../API/api_request';
 import { const_data } from '../../CONST/const_data';
 import { toast } from 'react-toastify';
+import { fetchCartDetails } from '../../redux/slice/CartItems';
 
 function Wishlist_item({ category, productImage, offer, title, sale_price, originalPrice, product_id, onDelete }) {
 
@@ -20,6 +21,7 @@ function Wishlist_item({ category, productImage, offer, title, sale_price, origi
     async function sentToCart() {
         try {
             dispatch(await wishlistSendToCartThunk({ product_id: product_id, variation: const_data.PRODUCT_VARIATION['1kg'] }))
+            dispatch(await fetchCartDetails())
             toast.success("Product sented to cart")
         } catch (e) {
 
