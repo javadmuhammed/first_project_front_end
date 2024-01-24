@@ -58,9 +58,13 @@ function Checkout() {
 
         getSingleInvoice(invoiceID).then((data) => {
             let response = data?.data;
+
+            console.log(response)
             if (response?.status) {
                 let invoice = response?.invoice;
                 setThisInvoice(invoice)
+
+
             }
         }).catch((err) => { })
     }, [stateUpdate])
