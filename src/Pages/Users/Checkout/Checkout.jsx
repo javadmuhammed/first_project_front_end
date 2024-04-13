@@ -16,6 +16,7 @@ import CoupenCodeApply from '../../../Component/Cart/CoupenCodeApply'
 import { getUserByJwtToken } from '../../../redux/slice/UserSlicer'
 import LoadingSpinner from '../../../Component/Util/ElementRelated/LoadingSpinner'
 import CategoryModalUser from '../../../Component/OverLay/CategoryModalUser'
+import { fetchCartDetails } from '../../../redux/slice/CartItems'
 
 function Checkout() {
 
@@ -34,24 +35,32 @@ function Checkout() {
     let [invoiceSummary, setInvoiceSummary] = useState({});
 
 
+    async function refreshCart() {
+        dispatch(await fetchCartDetails())
+    }
+
+
     // let cartData = useSelector((state) => state.userCart);
     // console.log(cartData)
 
-    useEffect(() => {
-        invoiceSummaryApi(invoiceID).then((data) => {
-            let response = data?.data 
-            if (response?.status) {
-                setInvoiceSummary(response?.summery)
-                setIsReadyToPlace(true)
-            } else {
-                navigate("/cart", { replace: true })
-            }
-        }).catch((err) => {
-            navigate("/cart", { replace: true })
-        })
-    }, [])
+    // useEffect(() => {
+    //     invoiceSummaryApi(invoiceID).then((data) => {
+    //         let response = data?.data
+    //         if (response?.status) {
+    //             console.log("Invoice summary");
+    //             console.log(response?.summery)
+    //             setInvoiceSummary(response?.summery)
+    //             setIsReadyToPlace(true)
+    //         } else {
+    //             navigate("/cart", { replace: true })
+    //         }
+    //     }).catch((err) => {
+    //         navigate("/cart", { replace: true })
+    //     })
+    // }, [])
 
     useEffect(() => {
+        
         if (invoiceID == null || phoneNumber == null) {
             navigate("/cart", { replace: true })
         }
@@ -61,9 +70,11 @@ function Checkout() {
 
             console.log(response)
             if (response?.status) {
-                let invoice = response?.invoice;
-                setThisInvoice(invoice)
 
+                let invoice = response?.invoice;
+                console.log(invoice)
+                setThisInvoice(invoice)
+                setIsReadyToPlace(true)
 
             }
         }).catch((err) => { })
@@ -97,11 +108,13 @@ function Checkout() {
                             if (data?.status) {
                                 let is_coupen = data?.coupen;
                                 if (is_coupen) {
-                                    alert("You won a coupen")
+                                    // alert("You won a coupen")
                                 }
 
                                 toast.success("Order placed success");
+                                refreshCart()
                                 navigate("/order_success/" + invoiceID)
+
                             } else {
                                 toast.error(data.msg);
                             }
@@ -130,7 +143,7 @@ function Checkout() {
 
         if (isReadyToPlace) {
 
-            
+
 
             if (selectedPaymentMethod == const_data.PAYMENT_METHOD.RAZORPAY) {
 
@@ -160,11 +173,13 @@ function Checkout() {
                     if (data?.status) {
                         let is_coupen = data?.coupen;
                         if (is_coupen) {
-                            alert("You won a coupen")
+                            // alert("You won a coupen")
                         }
                         toast.success("Order placed success");
                         navigate("/order_success/" + invoiceID)
-                        dispatch(await getUserByJwtToken({ jwt: userData.access_token }))
+                        // alert("Step one")
+                        // dispatch(await getUserByJwtToken({ jwt: userData.access_token }))
+                        refreshCart();
                     } else {
                         toast.error(data.msg);
                     }
@@ -203,21 +218,21 @@ function Checkout() {
                         <div className="col-md-4">
                             <Summary title={"Cart Summary"} list={[{
                                 title: "Total",
-                                value: invoiceSummary?.total ?? 0,
+                                value: thisInvoice?.invoice_summary?.total ?? 0,
                             },
                             {
                                 title: "Discount",
-                                value: invoiceSummary?.discount ?? 0,
+                                value: thisInvoice?.invoice_summary?.discount ?? 0,
                             },
                             {
                                 title: "Coupen Discount",
-                                value: Math.floor(thisInvoice?.original_amount - thisInvoice?.total_amount) ?? 0,
+                                value: thisInvoice?.coupen_discount ?? 0,
                             }, {
                                 title: "Sub total",
-                                value: (invoiceSummary?.subTotal - Math.floor(thisInvoice?.original_amount - thisInvoice?.total_amount)) ?? 0,
+                                value: thisInvoice?.invoice_summary?.subTotal ?? 0,
                             }]}
 
-                                total={(invoiceSummary?.subTotal - Math.floor(thisInvoice?.original_amount - thisInvoice?.total_amount)) ?? 0}></Summary>
+                                total={thisInvoice?.invoice_summary?.subTotal ?? 0}></Summary>
                             <div class="payment-secure bg-white">
                                 <i class="uil uil-padlock"></i>Secure checkout
                             </div>

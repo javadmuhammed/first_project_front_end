@@ -18,6 +18,7 @@ function OrderSingleItemView({ productData }) {
 
     let { order_id } = useParams();
     let [thisOrder, setThisOrder] = useState(null);
+    // let [thisProduct, setThisPro]
     let [currentOrderStatus, setCurrentOrderStatus] = useState("");
     let [shippingHistory, setShippingHistory] = useState(new Set());
     let navigate = useNavigate();
@@ -33,6 +34,8 @@ function OrderSingleItemView({ productData }) {
             if (response?.status) {
                 let order = response?.order;
                 if (order) {
+                    console.log(response, order)
+                    // alert("fsdf")
                     setThisOrder(response?.order)
                     setCurrentOrderStatus(response?.order?.status);
                     setShippingHistory(response?.order?.shipping_history)
@@ -120,7 +123,7 @@ function OrderSingleItemView({ productData }) {
         <div>
 
             <DashBoardLayout currentPage={"Product"}>
-                <OrderedSingleItem productImage={const_data.public_image_url + "/" + thisOrder?.product?.images[0]} productData={{ id: thisOrder?.product?._id, name: thisOrder?.product?.name, status: thisOrder?.status, quanity: thisOrder?.products?.quantity, tooltip: "You just orderd " + thisOrder?.products?.quantity + " items" }} deliveryTime={thisOrder?.delivery_time} ></OrderedSingleItem>
+                <OrderedSingleItem productImage={const_data.public_image_url + "/" + thisOrder?.products?.product?.images[0]} productData={{ id: thisOrder?.products?.product?._id, name: thisOrder?.products?.product?.name, status: thisOrder?.status, quanity: thisOrder?.products?.product?.quantity, tooltip: "You just orderd " + thisOrder?.products?.quantity + " items" }} deliveryTime={thisOrder?.delivery_time} ></OrderedSingleItem>
                 <OrderdDetailView deliveryCharge={"Free"} discount={thisOrder?.products?.discount} total={(thisOrder?.products?.total)} subTotal={(thisOrder?.products?.sub_total)}></OrderdDetailView>
                 <div className="col-md-12">
                     {

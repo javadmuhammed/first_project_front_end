@@ -7,6 +7,7 @@ import { const_data } from '../../CONST/const_data'
 export let getUserByJwtToken = createAsyncThunk("user/get_user_by_jwt", async (payload) => {  
     try {
         let user = await instance.get(const_data.API_ENDPOINT.get_user_by_jwt + "/" + payload.jwt)
+        // alert("Step 2")
         console.log(user)
         return user
     } catch (e) {

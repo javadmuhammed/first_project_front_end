@@ -38,7 +38,7 @@ function ProductVariation({ product_id, cart_id, selected_variation = const_data
             }
 
         } else {
-            alert("Hello world")
+            // alert("Hello world")
         }
     }
 

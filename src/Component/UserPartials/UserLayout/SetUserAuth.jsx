@@ -17,7 +17,9 @@ function SetUserAuth({ children }) {
     let wishListItems = useSelector((state) => state.userWishlist) 
 
     useEffect(() => {
+
         if (isLogged) {
+            // alert("Worked")
             dispatch(fetchCartDetails());
         }
     }, [cartData?.cart_update, isLogged])
